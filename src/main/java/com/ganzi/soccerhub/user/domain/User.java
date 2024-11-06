@@ -1,12 +1,12 @@
-package com.ganzi.soccerhub.member.domain;
+package com.ganzi.soccerhub.user.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public class Member {
+public class User {
 
-    @Getter private final MemberId id;
+    @Getter private final UserId id;
 
     @Getter private final String name;
 
@@ -14,7 +14,7 @@ public class Member {
 
     @Getter private final String email;
 
-    public record MemberId(Long value) {
+    public record UserId(Long value) {
 
     }
 }
