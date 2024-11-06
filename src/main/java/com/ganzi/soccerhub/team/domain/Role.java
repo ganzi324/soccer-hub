@@ -1,4 +1,4 @@
-package com.ganzi.soccerhub.member.domain;
+package com.ganzi.soccerhub.team.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
