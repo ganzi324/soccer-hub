@@ -2,7 +2,9 @@ package com.ganzi.soccerhub.team.domain;
 
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class Member {
 

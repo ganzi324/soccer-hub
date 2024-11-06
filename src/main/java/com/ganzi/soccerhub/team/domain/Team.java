@@ -1,7 +1,9 @@
 package com.ganzi.soccerhub.team.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class Team {
 
