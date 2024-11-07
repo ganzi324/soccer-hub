@@ -1,10 +1,9 @@
 package com.ganzi.soccerhub.post.domain;
 
-import com.ganzi.soccerhub.user.domain.User;
+import com.ganzi.soccerhub.team.domain.Member;
+import com.ganzi.soccerhub.team.domain.Team;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -14,9 +13,9 @@ public abstract class Post {
 
     private final PostType type;
 
-    private final LocalDateTime createAt;
+    private final Team.TeamId teamId;
 
-    private final User.UserId userId;
+    private final Member.MemberId memberId;
 
     private String title;
 
