@@ -4,10 +4,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Optional;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
 
-    @Getter private final UserId id;
+    private final UserId id;
 
     @Getter private final String name;
 
@@ -30,6 +32,10 @@ public class User {
             String email
     ) {
         return new User(id, name, password, email);
+    }
+
+    public Optional<UserId> getId() {
+        return Optional.ofNullable(this.id);
     }
 
     public record UserId(Long value) {
