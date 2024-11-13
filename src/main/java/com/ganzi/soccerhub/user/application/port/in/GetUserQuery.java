@@ -1,0 +1,9 @@
+package com.ganzi.soccerhub.user.application.port.in;
+
+import com.ganzi.soccerhub.user.domain.User;
+
+import java.util.Optional;
+
+public interface GetUserQuery {
+    Optional<User> getUserByEmail(String email);
+}
