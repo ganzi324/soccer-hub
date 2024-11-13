@@ -13,25 +13,25 @@ public class User {
 
     @Getter private final String name;
 
-    @Getter private final String password;
-
     @Getter private final String email;
+
+    @Getter private final String picture;
 
     public static User withoutId(
             String name,
-            String password,
-            String email
+            String email,
+            String picture
     ) {
-        return new User(null, name, password, email);
+        return new User(null, name, email, picture);
     }
 
     public static User withId(
             UserId id,
             String name,
-            String password,
-            String email
+            String email,
+            String picture
     ) {
-        return new User(id, name, password, email);
+        return new User(id, name, email, picture);
     }
 
     public Optional<UserId> getId() {

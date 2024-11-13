@@ -9,7 +9,7 @@ public class AddUserCommandTest {
 
     @Test
     void constructionFailed() {
-        assertThatThrownBy(() -> new AddUserCommand(null, "1234", "invalid email"))
+        assertThatThrownBy(() -> new AddUserCommand(null, "invalid email", "some_picture.jpg"))
                 .isExactlyInstanceOf(ConstraintViolationException.class)
                 .hasMessageContaining("well-formed")
                 .hasMessageContaining("null");

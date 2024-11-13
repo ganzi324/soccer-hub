@@ -17,8 +17,8 @@ public class AddUserService implements AddUserUseCase {
     public Long addUser(AddUserCommand command) {
         User user = User.withoutId(
                 command.getName(),
-                command.getPassword(),
-                command.getEmail()
+                command.getEmail(),
+                command.getPicture()
         );
 
         return addUserPort.save(user).getId().get().value();
