@@ -20,10 +20,19 @@ class UserPersistenceAdaptor implements AddUserPort, LoadUserPort {
         userEntity.setName(user.getName());
         userEntity.setEmail(user.getEmail());
         userEntity.setPicture(user.getPicture());
+        userEntity.setUserRole(user.getUserRole());
+        userEntity.setUserType(user.getUserType());
 
         userRepository.save(userEntity);
 
-        return User.withId(new User.UserId(userEntity.getId()), userEntity.getName(), userEntity.getEmail(), userEntity.getPicture());
+        return User.withId(
+                new User.UserId(userEntity.getId()),
+                userEntity.getName(),
+                userEntity.getEmail(),
+                userEntity.getPicture(),
+                userEntity.getUserRole(),
+                userEntity.getUserType()
+            );
     }
 
     @Override

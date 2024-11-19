@@ -23,7 +23,7 @@ public class AddUserServiceTest {
 
         givenSaveUserWillSucceed(user);
 
-        AddUserCommand command = new AddUserCommand(user.getName(), user.getEmail(), user.getPicture());
+        AddUserCommand command = new AddUserCommand(user.getName(), user.getEmail(), user.getPicture(), user.getUserType());
         assertThat(addUserService.addUser(command)).isEqualTo(user.getId().get().value());
     }
 

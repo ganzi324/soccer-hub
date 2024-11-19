@@ -17,21 +17,28 @@ public class User {
 
     @Getter private final String picture;
 
+    @Getter private final UserRole userRole;
+
+    @Getter private final UserType userType;
+
     public static User withoutId(
             String name,
             String email,
-            String picture
+            String picture,
+            UserType userType
     ) {
-        return new User(null, name, email, picture);
+        return new User(null, name, email, picture, UserRole.USER, userType);
     }
 
     public static User withId(
             UserId id,
             String name,
             String email,
-            String picture
+            String picture,
+            UserRole userRole,
+            UserType userType
     ) {
-        return new User(id, name, email, picture);
+        return new User(id, name, email, picture, userRole, userType);
     }
 
     public Optional<UserId> getId() {
