@@ -1,11 +1,13 @@
 package com.ganzi.soccerhub.auth;
 
 import com.ganzi.soccerhub.auth.dto.OAuthAttributes;
+import com.ganzi.soccerhub.auth.dto.PrincipalInfo;
 import com.ganzi.soccerhub.auth.dto.SessionUser;
 import com.ganzi.soccerhub.user.application.command.AddUserCommand;
 import com.ganzi.soccerhub.user.application.port.in.AddUserUseCase;
 import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
 import com.ganzi.soccerhub.user.domain.User;
+import com.ganzi.soccerhub.user.domain.UserType;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +15,6 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,24 +51,27 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         httpSession.setAttribute("user", new SessionUser(user));
 
-        System.out.println(oAuth2User);
-
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_GUEST")),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey()
+        return new PrincipalInfo(
+                Collections.singleton(new SimpleGrantedAuthority(user.getUserRole().getCode())),
+                attributes.attributes(),
+                userNameAttributeName
         );
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {
-        Optional<User> currentUser = getUserQuery.getUserByEmail(attributes.getEmail());
+        Optional<User> currentUser = getUserQuery.getUserByEmail(attributes.email());
         if (currentUser.isPresent()) {
             return currentUser.get();
         }
 
-        AddUserCommand command = new AddUserCommand(attributes.getName(), attributes.getEmail(), attributes.getPicture());
+        AddUserCommand command = new AddUserCommand(
+                attributes.name(),
+                attributes.email(),
+                attributes.picture(),
+                UserType.from(attributes.registrationId())
+        );
         addUserUseCase.addUser(command);
 
-        return getUserQuery.getUserByEmail(attributes.getEmail()).get();
+        return getUserQuery.getUserByEmail(attributes.email()).get();
     }
 }
