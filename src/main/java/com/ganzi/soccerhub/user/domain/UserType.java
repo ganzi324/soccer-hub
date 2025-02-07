@@ -10,6 +10,7 @@ import java.util.Arrays;
 @Getter
 public enum UserType implements CommonType {
 
+    USER_NORMAL("normal", "일반"),
     USER_GOOGLE("google", "구글"),
     USER_NAVER("naver", "네이버");
 
