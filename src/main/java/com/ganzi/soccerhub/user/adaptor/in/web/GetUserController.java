@@ -1,4 +1,4 @@
-package com.ganzi.soccerhub.user.adaptor.out.web;
+package com.ganzi.soccerhub.user.adaptor.in.web;
 
 import com.ganzi.soccerhub.common.WebAdaptor;
 import com.ganzi.soccerhub.common.web.ApiResponse;
