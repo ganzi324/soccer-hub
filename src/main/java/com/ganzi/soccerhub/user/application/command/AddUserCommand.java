@@ -15,18 +15,30 @@ public class AddUserCommand extends SelfValidating<AddUserCommand> {
     @Email
     private final String email;
 
-    @NotNull
+    private final String password;
+
     private final String picture;
 
     @NotNull
     private final UserType userType;
 
-    public AddUserCommand(String name, String email, String picture, UserType userType) {
+    public AddUserCommand(String name, String email, String password, String picture, UserType userType) {
         this.name = name;
         this.email = email;
+        this.password = password;
         this.picture = picture;
         this.userType = userType;
 
         this.validateSelf();
     }
+
+    public static AddUserCommand createNormalUser(String name, String email, String password) {
+        return new AddUserCommand(name, email, password, null, UserType.USER_NORMAL);
+    }
+
+    public static AddUserCommand createSnsUser(String name, String email, String picture, UserType userType) {
+        assert userType == UserType.USER_NORMAL : "SNS 사용자는 USER_NORMAL 타입이 될 수 없다.";
+        return new AddUserCommand(name, email, null, picture, userType);
+    }
+
 }
