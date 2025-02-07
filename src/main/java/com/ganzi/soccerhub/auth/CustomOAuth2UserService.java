@@ -27,7 +27,7 @@ import java.util.Optional;
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final GetUserQuery getUserQuery;
-    private final AddUserUseCase addUserUseCase;
+//    private final AddUserUseCase addUserUseCase;
     private final HttpSession httpSession;
 
     @Override
@@ -64,13 +64,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             return currentUser.get();
         }
 
-        AddUserCommand command = new AddUserCommand(
+        AddUserCommand command = AddUserCommand.createSnsUser(
                 attributes.name(),
                 attributes.email(),
                 attributes.picture(),
                 UserType.from(attributes.registrationId())
         );
-        addUserUseCase.addUser(command);
+//        addUserUseCase.addUser(command);
 
         return getUserQuery.getUserByEmail(attributes.email()).get();
     }
