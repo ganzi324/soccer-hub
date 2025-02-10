@@ -1,6 +1,7 @@
 package com.ganzi.soccerhub.user.application.command;
 
 import com.ganzi.soccerhub.common.SelfValidating;
+import com.ganzi.soccerhub.common.annotation.Password;
 import com.ganzi.soccerhub.user.domain.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ public class AddUserCommand extends SelfValidating<AddUserCommand> {
     @Email
     private final String email;
 
+    @Password(message = "대문자, 숫자, 특수문자가 하나 이상 포함된 8~50자 비밀번호")
     private final String password;
 
     private final String picture;
