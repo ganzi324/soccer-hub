@@ -1,6 +1,5 @@
 package com.ganzi.soccerhub.common.web;
 
-import com.ganzi.soccerhub.common.web.exception.CustomException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -26,9 +25,5 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> ok(T data) {
         return ApiResponse.of(HttpStatus.OK, HttpStatus.OK.name(), data);
-    }
-
-    public static ApiResponse<?> error(CustomException exception) {
-        return ApiResponse.of(exception.getStatus(), exception.getMessage(), null);
     }
 }
