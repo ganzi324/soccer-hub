@@ -8,8 +8,13 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
     DEFAULT(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러"),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다.");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
+    DUPLICATE_USER_ID(HttpStatus.BAD_REQUEST, "아이디 중복");
 
     private final HttpStatus status;
     private final String message;
+
+    public String getCode() {
+        return this.name();
+    }
 }
