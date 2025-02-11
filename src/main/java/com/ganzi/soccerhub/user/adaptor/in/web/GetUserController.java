@@ -2,8 +2,7 @@ package com.ganzi.soccerhub.user.adaptor.in.web;
 
 import com.ganzi.soccerhub.common.WebAdaptor;
 import com.ganzi.soccerhub.common.web.ApiResponse;
-import com.ganzi.soccerhub.common.web.exception.CustomException;
-import com.ganzi.soccerhub.common.web.exception.ErrorCode;
+import com.ganzi.soccerhub.user.application.exception.UserNotFoundException;
 import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ class GetUserController {
 
     @GetMapping("/users/{id}")
     ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable("id") String id) {
-        User user = getUserQuery.getUserByEmail(id).orElseThrow(() -> CustomException.of(ErrorCode.USER_NOT_FOUND));
+        User user = getUserQuery.getUserByEmail(id).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(ApiResponse.ok(UserResponse.of(user)));
     }
 }
