@@ -1,27 +1,28 @@
 package com.ganzi.soccerhub.common.web.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 public class CustomException extends RuntimeException {
 
     private final ErrorCode errorCode;
 
+    @Getter private final String details;
+
     public static CustomException getDefaultException() {
-        return new CustomException();
+        return new CustomException(ErrorCode.DEFAULT, null);
     }
 
-    public static CustomException of(ErrorCode code) {
-        return new CustomException(code);
-    }
-
-    private CustomException() {
-        super(ErrorCode.DEFAULT.getMessage());
-        errorCode = ErrorCode.DEFAULT;
-    }
-
-    private CustomException(ErrorCode errorCode) {
+    public CustomException(ErrorCode errorCode, String details) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
+        this.details = details;
+    }
+
+    public CustomException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+        this.details = null;
     }
 
     public String getMessage() {
@@ -31,4 +32,9 @@ public class CustomException extends RuntimeException {
     public HttpStatus getStatus() {
         return errorCode.getStatus();
     }
+
+    public String getCode() {
+        return errorCode.getCode();
+    }
+
 }
