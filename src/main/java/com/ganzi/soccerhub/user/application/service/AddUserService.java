@@ -2,8 +2,10 @@ package com.ganzi.soccerhub.user.application.service;
 
 import com.ganzi.soccerhub.common.UseCase;
 import com.ganzi.soccerhub.user.application.command.AddUserCommand;
+import com.ganzi.soccerhub.user.application.exception.DuplicateUserIdException;
 import com.ganzi.soccerhub.user.application.port.in.AddUserUseCase;
 import com.ganzi.soccerhub.user.application.port.out.AddUserPort;
+import com.ganzi.soccerhub.user.application.port.out.LoadUserPort;
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +17,7 @@ import java.util.Optional;
 public class AddUserService implements AddUserUseCase {
 
     private final AddUserPort addUserPort;
+    private final LoadUserPort loadUserPort;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -29,6 +32,14 @@ public class AddUserService implements AddUserUseCase {
                 command.getUserType()
         );
 
+        checkDuplication(user);
+
         return addUserPort.save(user).getId().get().value();
+    }
+
+    private void checkDuplication(User user) {
+        if (loadUserPort.loadUserByEmail(user.getEmail()).isPresent()) {
+            throw new DuplicateUserIdException(user.getEmail());
+        }
     }
 }
