@@ -1,20 +1,22 @@
 package com.ganzi.soccerhub.auth;
 
+import com.ganzi.soccerhub.auth.exception.InvalidTokenException;
 import com.ganzi.soccerhub.common.property.JwtProviderProperties;
 import com.ganzi.soccerhub.user.domain.User;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.time.Instant;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class JwtAuthProvider {
+    private static final String AUDIENCE = "userId";
+    private static final String AUTHORITY = "auth";
 
     private final JwtProviderProperties properties;
     private final Key key;
@@ -32,12 +34,41 @@ public class JwtAuthProvider {
                 .and()
                 .subject("accessToken")
                 .claim("iss", "off")
-                .claim("aud", user.getEmail())
-                .claim("auth", user.getUserRole())
+                .claim(AUDIENCE, user.getEmail())
+                .claim(AUTHORITY, user.getUserRole().getCode())
                 .expiration(Date.from(Instant.now().plusSeconds(properties.getAccessExpiredTime())))
                 .issuedAt(new Date())
                 .signWith(key)
                 .compact();
+    }
+
+    public String getUserEmail(String token) {
+        return parseClaims(token).get(AUDIENCE, String.class);
+    }
+
+    private Jws<Claims> parseToken(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith((SecretKey) key)
+                    .build()
+                    .parseSignedClaims(token);
+        } catch (SecurityException | MalformedJwtException e) {
+            // invalid token
+            throw new InvalidTokenException();
+        } catch (ExpiredJwtException e) {
+            // expired
+            throw new InvalidTokenException();
+        } catch (UnsupportedJwtException e) {
+            // unsupported
+            throw new InvalidTokenException();
+        } catch (IllegalArgumentException e) {
+            // empty
+            throw new InvalidTokenException();
+        }
+    }
+
+    private Claims parseClaims(String token) {
+        return parseToken(token).getPayload();
     }
 
     private static Map<String, Object> createHeaders() {
