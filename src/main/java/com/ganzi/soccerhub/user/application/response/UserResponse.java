@@ -1,4 +1,4 @@
-package com.ganzi.soccerhub.user.adaptor.in.web;
+package com.ganzi.soccerhub.user.application.response;
 
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.AccessLevel;
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-class UserResponse {
+public class UserResponse {
 
     private String name;
     private String email;
