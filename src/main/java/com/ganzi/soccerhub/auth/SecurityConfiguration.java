@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                                 )
                 )
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile", "/users/**").permitAll()
+                        .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile", "/users/**", "/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .logout((logout) -> logout
