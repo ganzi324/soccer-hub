@@ -4,6 +4,7 @@ import com.ganzi.soccerhub.common.WebAdaptor;
 import com.ganzi.soccerhub.common.web.ApiResponse;
 import com.ganzi.soccerhub.user.application.exception.UserNotFoundException;
 import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
+import com.ganzi.soccerhub.user.application.response.UserResponse;
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
