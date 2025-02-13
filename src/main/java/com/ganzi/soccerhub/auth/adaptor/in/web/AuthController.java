@@ -5,6 +5,8 @@ import com.ganzi.soccerhub.auth.application.port.in.LoginUseCase;
 import com.ganzi.soccerhub.auth.application.response.LoginResponse;
 import com.ganzi.soccerhub.common.WebAdaptor;
 import com.ganzi.soccerhub.common.web.ApiResponse;
+import com.ganzi.soccerhub.user.application.command.AddUserCommand;
+import com.ganzi.soccerhub.user.application.port.in.AddUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 class AuthController {
 
     private final LoginUseCase loginUseCase;
+    private final AddUserUseCase addUserUseCase;
 
     @PostMapping(path = "/login")
     ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
@@ -30,4 +33,18 @@ class AuthController {
         return ResponseEntity.ok(ApiResponse.ok(loginUseCase.execute(command)));
     }
 
+    @PostMapping(path = "/sign-in")
+    void signIn(@RequestBody SignInRequest requestDto) {
+        AddUserCommand command = AddUserCommand.createNormalUser(
+                requestDto.name(),
+                requestDto.email(),
+                requestDto.password()
+        );
+
+        addUserUseCase.addUser(command);
+    }
+
+
 }
+
+
