@@ -5,36 +5,36 @@ import com.ganzi.soccerhub.auth.application.command.LoginCommand;
 import com.ganzi.soccerhub.auth.application.port.in.LoginUseCase;
 import com.ganzi.soccerhub.auth.application.response.LoginResponse;
 import com.ganzi.soccerhub.common.UseCase;
-import com.ganzi.soccerhub.user.application.exception.InvalidPasswordException;
-import com.ganzi.soccerhub.user.application.exception.UserNotFoundException;
-import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
-import com.ganzi.soccerhub.user.application.response.UserResponse;
-import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Map;
 
 @UseCase
 @RequiredArgsConstructor
 public class LoginService implements LoginUseCase {
 
-    private final GetUserQuery getUserQuery;
-    private final BCryptPasswordEncoder passwordEncoder;
     private final JwtAuthProvider jwtAuthProvider;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public LoginResponse execute(LoginCommand command) {
-        User user = this.getUserQuery.getUserByEmail(command.getEmail()).orElseThrow(UserNotFoundException::new);
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(command.getEmail(), command.getPassword()));
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        if (!passwordEncoder.matches(command.getPassword(), user.getPassword())) {
-            throw new InvalidPasswordException();
-        }
+        Map<String, String> claims = Map.of(
+                JwtAuthProvider.AUDIENCE, userDetails.getUsername(),
+                JwtAuthProvider.AUTHORITY, userDetails.getAuthorities().toString()
+        );
 
-        String accessToken = this.jwtAuthProvider.generateAccessToken(user);
+        String accessToken = this.jwtAuthProvider.generateAccessToken(claims);
 
         return new LoginResponse(
                 accessToken,
-                null,
-                UserResponse.of(user)
+                null
         );
     }
 

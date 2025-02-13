@@ -2,7 +2,6 @@ package com.ganzi.soccerhub.auth;
 
 import com.ganzi.soccerhub.auth.exception.InvalidTokenException;
 import com.ganzi.soccerhub.common.property.JwtProviderProperties;
-import com.ganzi.soccerhub.user.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -15,8 +14,8 @@ import java.util.*;
 
 @Component
 public class JwtAuthProvider {
-    private static final String AUDIENCE = "userId";
-    private static final String AUTHORITY = "auth";
+    public static final String AUDIENCE = "userId";
+    public static final String AUTHORITY = "auth";
 
     private final JwtProviderProperties properties;
     private final Key key;
@@ -27,15 +26,14 @@ public class JwtAuthProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(User user) {
+    public String generateAccessToken(Map<String, String> claims) {
         return Jwts.builder()
                 .header()
                 .add(createHeaders())
                 .and()
                 .subject("accessToken")
                 .claim("iss", "off")
-                .claim(AUDIENCE, user.getEmail())
-                .claim(AUTHORITY, user.getUserRole().getCode())
+                .claims(claims)
                 .expiration(Date.from(Instant.now().plusSeconds(properties.getAccessExpiredTime())))
                 .issuedAt(new Date())
                 .signWith(key)
