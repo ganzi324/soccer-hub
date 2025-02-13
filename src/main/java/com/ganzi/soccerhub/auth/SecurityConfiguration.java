@@ -45,6 +45,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/h2-console/**", "/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/")
                 )
