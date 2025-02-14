@@ -8,7 +8,7 @@ import com.ganzi.soccerhub.user.application.port.out.AddUserPort;
 import com.ganzi.soccerhub.user.application.port.out.LoadUserPort;
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ public class AddUserService implements AddUserUseCase {
 
     private final AddUserPort addUserPort;
     private final LoadUserPort loadUserPort;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Long addUser(AddUserCommand command) {
