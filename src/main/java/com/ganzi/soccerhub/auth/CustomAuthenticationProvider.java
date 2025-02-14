@@ -1,6 +1,7 @@
 package com.ganzi.soccerhub.auth;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.text.MessageFormat;
+
+@Slf4j
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -24,6 +28,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails =  userDetailsService.loadUserByUsername(username);
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+            log.info(MessageFormat.format("Password is incorrect. (ID : {0})", username));
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 

@@ -5,6 +5,7 @@ import com.ganzi.soccerhub.common.property.JwtProviderProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -12,6 +13,7 @@ import java.security.Key;
 import java.time.Instant;
 import java.util.*;
 
+@Slf4j
 @Component
 public class JwtAuthProvider {
     public static final String AUDIENCE = "userId";
@@ -51,7 +53,6 @@ public class JwtAuthProvider {
                     .build()
                     .parseSignedClaims(token);
         } catch (SecurityException | MalformedJwtException e) {
-            // invalid token
             throw new InvalidTokenException();
         } catch (ExpiredJwtException e) {
             // expired
