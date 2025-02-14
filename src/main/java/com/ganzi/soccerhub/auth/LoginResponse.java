@@ -1,4 +1,4 @@
-package com.ganzi.soccerhub.auth.application.response;
+package com.ganzi.soccerhub.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
