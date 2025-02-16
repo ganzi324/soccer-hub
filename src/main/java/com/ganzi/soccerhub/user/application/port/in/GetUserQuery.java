@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface GetUserQuery {
     Optional<User> getUserByEmail(String email);
+
+    Optional<User> getUserById(Long id);
 }

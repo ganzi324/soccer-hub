@@ -18,4 +18,9 @@ class GetUserService implements GetUserQuery {
     public Optional<User> getUserByEmail(String email) {
         return loadUserPort.loadUserByEmail(email);
     }
+
+    @Override
+    public Optional<User> getUserById(Long id) {
+        return loadUserPort.loadUserById(id);
+    }
 }
