@@ -19,4 +19,19 @@ class UserMapper {
         );
     }
 
+    UserJpaEntity mapToJpaEntity(User user) {
+        UserJpaEntity userJpaEntity = new UserJpaEntity(
+                null,
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getPicture(),
+                user.getUserRole(),
+                user.getUserType()
+        );
+        user.getId().ifPresent(userId -> userJpaEntity.setId(userId.value()));
+
+        return userJpaEntity;
+    }
+
 }
