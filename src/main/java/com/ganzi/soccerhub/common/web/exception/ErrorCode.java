@@ -12,7 +12,8 @@ public enum ErrorCode {
     DUPLICATE_USER_ID(HttpStatus.BAD_REQUEST, "아이디 중복"),
     INVALID_REQUEST_PARAMETER(HttpStatus.BAD_REQUEST, "유효하지 않은 파라미터가 포함되어 있습니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "접근 권한이 없습니다.");
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "접근 권한이 없습니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
 
     private final HttpStatus status;
     private final String message;
