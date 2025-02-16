@@ -7,6 +7,6 @@ import com.ganzi.soccerhub.user.domain.UserType;
 public class UserTestData {
 
     public static User defaultUser() {
-        return User.withId(new User.UserId(1L), "ganzi", "1234", "ganzi324@gmail.com", UserRole.USER, UserType.USER_GOOGLE);
+        return User.withId(new User.UserId(1L), "ganzi", "ganzi324@gmail.com", "1234", null, UserRole.USER, UserType.USER_GOOGLE);
     }
 }
