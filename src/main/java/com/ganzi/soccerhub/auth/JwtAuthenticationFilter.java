@@ -26,13 +26,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null) {
             String email = jwtAuthProvider.getUserEmail(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            AuthUser authUser = (AuthUser) userDetailsService.loadUserByUsername(email);
+
+            SessionUser sessionUser = new SessionUser(authUser.getId(), authUser.getUsername());
 
             SecurityContextHolder.getContext()
                     .setAuthentication(new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            token,
-                            userDetails.getAuthorities()
+                            sessionUser,
+                            null,
+                            authUser.getAuthorities()
                     ));
         }
 
