@@ -49,6 +49,13 @@ public class User {
         return Optional.ofNullable(this.id);
     }
 
+    public User update(UserUpdateProfile updateVo) {
+        String name = Optional.ofNullable(updateVo.name()).orElse(this.name);
+        String picture = Optional.ofNullable(updateVo.name()).orElse(this.picture);
+
+        return new User(this.id, name, this.email, this.password, picture, this.userRole, this.userType);
+    }
+
     public record UserId(Long value) {
 
     }
