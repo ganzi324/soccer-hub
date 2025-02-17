@@ -1,5 +1,6 @@
 package com.ganzi.soccerhub.team.domain;
 
+import com.ganzi.soccerhub.user.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,21 +17,25 @@ public class Team {
 
     private String description;
 
+    private User.UserId createdBy;
+
     public static Team withoutId(
             String name,
             boolean isPrivate,
-            String description
+            String description,
+            User.UserId createdBy
     ) {
-        return new Team(null, name, isPrivate, description);
+        return new Team(null, name, isPrivate, description, createdBy);
     }
 
     public static Team withId(
             TeamId id,
             String name,
             boolean isPrivate,
-            String description
+            String description,
+            User.UserId createdBy
     ) {
-        return new Team(id, name, isPrivate, description);
+        return new Team(id, name, isPrivate, description, createdBy);
     }
 
     public record TeamId(Long value) {
