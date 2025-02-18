@@ -2,6 +2,7 @@ package com.ganzi.soccerhub.user.application.service;
 
 import com.ganzi.soccerhub.common.UserTestData;
 import com.ganzi.soccerhub.user.application.command.AddUserCommand;
+import com.ganzi.soccerhub.user.application.port.in.AddUserUseCase;
 import com.ganzi.soccerhub.user.application.port.out.AddUserPort;
 import com.ganzi.soccerhub.user.application.port.out.LoadUserPort;
 import com.ganzi.soccerhub.user.domain.User;
@@ -23,7 +24,7 @@ public class AddUserServiceTest {
     private final LoadUserPort loadUserPort = Mockito.mock(LoadUserPort.class);
     private final PasswordEncoder passwordEncoder = Mockito.mock(BCryptPasswordEncoder.class);
 
-    private final AddUserService addUserService = new AddUserService(
+    private final AddUserUseCase addUserUseCase = new AddUserService(
             addUserPort,
             loadUserPort,
             passwordEncoder
@@ -38,7 +39,7 @@ public class AddUserServiceTest {
         givenEncodeWillSuccess();
 
         AddUserCommand command = new AddUserCommand(user.getName(), user.getEmail(), user.getPassword(), user.getPicture(), user.getUserType());
-        assertThat(addUserService.addUser(command)).isEqualTo(user.getId().get().value());
+        assertThat(addUserUseCase.addUser(command)).isEqualTo(user.getId().get().value());
     }
 
     private void givenLoadUserWillSucceed(User user) {
