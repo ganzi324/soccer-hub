@@ -12,18 +12,18 @@ public class AddTeamCommand extends SelfValidating<AddTeamCommand> {
     @NotBlank
     private final String name;
 
-    private final String description;
-
     @NotNull
     private final boolean isPrivate;
+
+    private final String description;
 
     @NotNull
     private final User.UserId createdBy;
 
-    public AddTeamCommand(String name, String description, boolean isPrivate, User.UserId createdBy) {
+    public AddTeamCommand(String name, boolean isPrivate, String description, User.UserId createdBy) {
         this.name = name;
-        this.description = description;
         this.isPrivate = isPrivate;
+        this.description = description;
         this.createdBy = createdBy;
 
         this.validateSelf();

@@ -52,7 +52,7 @@ public class AddTeamServiceTest {
         givenSaveTeamWillSucceed(team);
 
         // when
-        AddTeamCommand command = new AddTeamCommand(team.getName(), team.getDescription(), team.isPrivate(), user.getId().get());
+        AddTeamCommand command = new AddTeamCommand(team.getName(), team.isPrivate(), team.getDescription(), user.getId().get());
         assertThat(addTeamUseCase.addTeam(command)).isEqualTo(team.getId());
 
     }
