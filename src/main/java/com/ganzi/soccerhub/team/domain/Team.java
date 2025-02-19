@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Optional;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Team {
@@ -40,5 +42,9 @@ public class Team {
 
     public record TeamId(Long value) {
 
+    }
+
+    public Optional<TeamId> getId() {
+        return Optional.ofNullable(this.id);
     }
 }
