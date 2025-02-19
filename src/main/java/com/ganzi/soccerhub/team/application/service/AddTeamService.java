@@ -1,6 +1,7 @@
 package com.ganzi.soccerhub.team.application.service;
 
 import com.ganzi.soccerhub.common.UseCase;
+import com.ganzi.soccerhub.common.exception.DomainIdNotFoundException;
 import com.ganzi.soccerhub.team.application.command.AddTeamCommand;
 import com.ganzi.soccerhub.team.application.exception.DuplicateTeamNameException;
 import com.ganzi.soccerhub.team.application.port.in.AddTeamUseCase;
@@ -25,14 +26,15 @@ public class AddTeamService implements AddTeamUseCase {
 
     @Override
     public Team.TeamId addTeam(AddTeamCommand command) {
-        // 생성자 조회 - 유효한 사용자 확인(팀 생성 제약)
         User user = loadUserPort.loadUserById(command.getCreatedBy().value()).orElseThrow(UserNotFoundException::new);
 
-        loadTeamPort.loadTeamByName(command.getName()).orElseThrow(() -> new DuplicateTeamNameException(MessageFormat.format("This team name already exists - {0}", command.getName())));
+        if (loadTeamPort.loadTeamByName(command.getName()).isPresent()) {
+            throw new DuplicateTeamNameException(MessageFormat.format("This team name already exists - {0}", command.getName()));
+        }
 
         Team newTeam = Team.withoutId(command.getName(), command.isPrivate(), command.getDescription(), command.getCreatedBy());
         Team savedTeam = addTeamPort.save(newTeam);
 
-        return savedTeam.getId();
+        return savedTeam.getId().orElseThrow(() -> new DomainIdNotFoundException(Team.class));
     }
 }
