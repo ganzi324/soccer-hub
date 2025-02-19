@@ -19,10 +19,10 @@ public record OAuthAttributes(
             String userNameAttributeName,
             Map<String, Object> attributes
     ) {
-        if (registrationId.equals(UserType.USER_GOOGLE.getCode())) {
+        if (registrationId.equals(UserType.GOOGLE.getCode())) {
             return ofGoogle(registrationId, userNameAttributeName, attributes);
         }
-        if (registrationId.equals(UserType.USER_NAVER.getCode())) {
+        if (registrationId.equals(UserType.NAVER.getCode())) {
             return ofNaver(registrationId, userNameAttributeName, attributes);
         }
 
