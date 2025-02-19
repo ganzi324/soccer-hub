@@ -35,11 +35,11 @@ public class AddUserCommand extends SelfValidating<AddUserCommand> {
     }
 
     public static AddUserCommand createNormalUser(String name, String email, String password) {
-        return new AddUserCommand(name, email, password, null, UserType.USER_NORMAL);
+        return new AddUserCommand(name, email, password, null, UserType.NORMAL);
     }
 
     public static AddUserCommand createSnsUser(String name, String email, String picture, UserType userType) {
-        assert userType == UserType.USER_NORMAL : "SNS 사용자는 USER_NORMAL 타입이 될 수 없다.";
+        assert userType == UserType.NORMAL : "SNS 사용자는 NORMAL 타입이 될 수 없다.";
         return new AddUserCommand(name, email, null, picture, userType);
     }
 
