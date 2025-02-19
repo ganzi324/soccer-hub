@@ -9,7 +9,7 @@ public class AddTeamCommandTest {
 
     @Test
     void constructionFailed() {
-        assertThatThrownBy(() -> new AddTeamCommand(null, "description", false, null))
+        assertThatThrownBy(() -> new AddTeamCommand(null, false, "description", null))
                 .isExactlyInstanceOf(ConstraintViolationException.class)
                 .hasMessageContaining("null");
     }
