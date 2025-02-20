@@ -57,6 +57,8 @@ public class User {
     }
 
     public record UserId(Long value) {
-
+        public static UserId of(Long id) {
+            return new UserId(id);
+        }
     }
 }
