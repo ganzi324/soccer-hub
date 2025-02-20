@@ -14,4 +14,13 @@ public enum UserRole implements CommonType {
 
     private final String code;
     private final String title;
+
+    public static UserRole fromCode(String code) {
+        for (UserRole role : values()) {
+            if (role.getCode().equals(code)) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Invalid role code: " + code);
+    }
 }
