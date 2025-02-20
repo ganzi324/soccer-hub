@@ -1,5 +1,7 @@
 package com.ganzi.soccerhub.auth;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ganzi.soccerhub.auth.exception.InvalidTokenException;
 import com.ganzi.soccerhub.common.property.JwtProviderProperties;
 import io.jsonwebtoken.*;
@@ -11,24 +13,29 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.time.Instant;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
 public class JwtAuthProvider {
     public static final String AUDIENCE = "userId";
+    public static final String EMAIL = "email";
     public static final String AUTHORITY = "auth";
 
     private final JwtProviderProperties properties;
     private final Key key;
+    private final ObjectMapper objectMapper;
 
-    public JwtAuthProvider(JwtProviderProperties properties) {
+    public JwtAuthProvider(JwtProviderProperties properties, ObjectMapper objectMapper) {
         this.properties = properties;
         byte[] keyBytes = Decoders.BASE64.decode(properties.getSecretKey());
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.objectMapper = objectMapper;
     }
 
-    public String generateAccessToken(Map<String, String> claims) {
+    public String generateAccessToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .header()
                 .add(createHeaders())
@@ -42,8 +49,14 @@ public class JwtAuthProvider {
                 .compact();
     }
 
-    public String getUserEmail(String token) {
-        return parseClaims(token).get(AUDIENCE, String.class);
+    public SessionUser getSessionUser(String token) {
+        Claims claims = parseClaims(token);
+
+        return new SessionUser(
+                claims.get(AUDIENCE, Long.class),
+                claims.get(EMAIL, String.class),
+                JwtClaimConverter.namesToRoles(objectMapper.convertValue(claims.get(AUTHORITY), new TypeReference<>() {}))
+        );
     }
 
     private Jws<Claims> parseToken(String token) {

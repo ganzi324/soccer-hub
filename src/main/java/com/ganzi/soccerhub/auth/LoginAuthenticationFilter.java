@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.Map;
 
 public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    public static final String DEFAULT_LOGIN_URL = "/api/auth/login";
+    public static final String DEFAULT_LOGIN_URL = "/v1/auth/login";
 
     private final AuthenticationManager authenticationManager;
     private final JwtAuthProvider jwtAuthProvider;
@@ -48,11 +47,12 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        UserDetails userDetails = (UserDetails) authResult.getPrincipal();
+        AuthUser authUser = (AuthUser) authResult.getPrincipal();
 
-        Map<String, String> claims = Map.of(
-                JwtAuthProvider.AUDIENCE, userDetails.getUsername(),
-                JwtAuthProvider.AUTHORITY, userDetails.getAuthorities().toString()
+        Map<String, Object> claims = Map.of(
+                JwtAuthProvider.AUDIENCE, authUser.getId(),
+                JwtAuthProvider.EMAIL, authUser.getUsername(),
+                JwtAuthProvider.AUTHORITY, JwtClaimConverter.extractRoleNames(authUser.getAuthorities())
         );
 
         String accessToken = jwtAuthProvider.generateAccessToken(claims);

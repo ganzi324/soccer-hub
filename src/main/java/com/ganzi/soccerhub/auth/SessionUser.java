@@ -1,5 +1,9 @@
 package com.ganzi.soccerhub.auth;
 
-public record SessionUser(Long id, String email) {
+import com.ganzi.soccerhub.user.domain.UserRole;
+
+import java.util.Set;
+
+public record SessionUser(Long id, String email, Set<UserRole> userRoles) {
 
 }

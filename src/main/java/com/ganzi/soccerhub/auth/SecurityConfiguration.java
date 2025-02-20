@@ -27,20 +27,17 @@ public class SecurityConfiguration {
     private final CustomOAuth2UserService customOauth2UserService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthProvider jwtAuthProvider;
-    private final UserDetailsService userDetailsService;
 
     public SecurityConfiguration(
             AuthenticationConfiguration authenticationConfiguration,
             CustomOAuth2UserService customOauth2UserService,
             @Qualifier("delegatedAuthenticationEntryPoint") AuthenticationEntryPoint authenticationEntryPoint,
-            JwtAuthProvider jwtAuthProvider,
-            UserDetailsService userDetailsService
+            JwtAuthProvider jwtAuthProvider
     ) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.customOauth2UserService = customOauth2UserService;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.jwtAuthProvider = jwtAuthProvider;
-        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -64,10 +61,10 @@ public class SecurityConfiguration {
                                 )
                 )
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/h2-console/**", "/api/auth/**").permitAll()
+                        .requestMatchers("/h2-console/**", "/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtAuthProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtAuthProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(new LoginAuthenticationFilter(authenticationManager(), jwtAuthProvider), UsernamePasswordAuthenticationFilter.class)
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/")
