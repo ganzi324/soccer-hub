@@ -24,14 +24,14 @@ class GetUserController {
     private final GetUserQuery getUserQuery;
 
     @GetMapping("/{id}")
-    ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable("id") String id) {
-        User user = getUserQuery.getUserByEmail(id).orElseThrow(UserNotFoundException::new);
+    ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable("id") Long id) {
+        User user = getUserQuery.getUserById(id).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(ApiResponse.ok(UserResponse.of(user)));
     }
 
     @GetMapping("/me")
     ResponseEntity<ApiResponse<UserResponse>> getMyProfile(@AuthenticationPrincipal SessionUser sessionUser) {
-        User user = getUserQuery.getUserByEmail(sessionUser.email()).orElseThrow(UserNotFoundException::new);
+        User user = getUserQuery.getUserById(sessionUser.id()).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(ApiResponse.ok(UserResponse.of(user)));
     }
 }
