@@ -7,6 +7,7 @@ import com.ganzi.soccerhub.user.application.exception.UserNotFoundException;
 import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
 import com.ganzi.soccerhub.user.application.response.UserResponse;
 import com.ganzi.soccerhub.user.domain.User;
+import com.ganzi.soccerhub.user.domain.User.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,13 +26,13 @@ class GetUserController {
 
     @GetMapping("/{id}")
     ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable("id") Long id) {
-        User user = getUserQuery.getUserById(id).orElseThrow(UserNotFoundException::new);
+        User user = getUserQuery.getUserById(UserId.of(id)).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(ApiResponse.ok(UserResponse.of(user)));
     }
 
     @GetMapping("/me")
     ResponseEntity<ApiResponse<UserResponse>> getMyProfile(@AuthenticationPrincipal SessionUser sessionUser) {
-        User user = getUserQuery.getUserById(sessionUser.id()).orElseThrow(UserNotFoundException::new);
+        User user = getUserQuery.getUserById(UserId.of(sessionUser.id())).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(ApiResponse.ok(UserResponse.of(user)));
     }
 }
