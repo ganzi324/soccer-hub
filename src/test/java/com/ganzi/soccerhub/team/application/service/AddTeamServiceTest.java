@@ -48,23 +48,23 @@ public class AddTeamServiceTest {
 
         // given
         givenLoadUserWillSucceed(user);
-        givenTeamDoesNotExist(team);
+        givenTeamDoesNotExist();
         givenSaveTeamWillSucceed(team);
 
         // when
         AddTeamCommand command = new AddTeamCommand(team.getName(), team.isPrivate(), team.getDescription(), user.getId().get());
-        assertThat(addTeamUseCase.addTeam(command)).isEqualTo(team.getId());
+        assertThat(addTeamUseCase.addTeam(command)).isEqualTo(team.getId().get());
 
     }
 
     private void givenLoadUserWillSucceed(User user) {
-        given(loadUserPort.loadUserById(user.getId().get().value()))
+        given(loadUserPort.loadUserById(user.getId().get()))
                 .willReturn(Optional.of(user));
     }
 
-    private void givenTeamDoesNotExist(Team team) {
+    private void givenTeamDoesNotExist() {
         given(loadTeamPort.loadTeamByName(anyString()))
-                .willReturn(Optional.of(team));
+                .willReturn(Optional.empty());
     }
 
     private void givenSaveTeamWillSucceed(Team team) {
