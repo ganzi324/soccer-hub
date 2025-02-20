@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @WebAdaptor
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/v1/users")
 @RequiredArgsConstructor
 class GetUserController {
 

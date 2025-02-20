@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @WebAdaptor
 @RestController
-@RequestMapping("/api/v1/teams")
+@RequestMapping("/v1/teams")
 @RequiredArgsConstructor
 class AddTeamController {
 
