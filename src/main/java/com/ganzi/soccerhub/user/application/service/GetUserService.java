@@ -20,7 +20,7 @@ class GetUserService implements GetUserQuery {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> getUserById(User.UserId id) {
         return loadUserPort.loadUserById(id);
     }
 }

@@ -26,7 +26,7 @@ public class AddTeamService implements AddTeamUseCase {
 
     @Override
     public Team.TeamId addTeam(AddTeamCommand command) {
-        User user = loadUserPort.loadUserById(command.getCreatedBy().value()).orElseThrow(UserNotFoundException::new);
+        User user = loadUserPort.loadUserById(command.getCreatedBy()).orElseThrow(UserNotFoundException::new);
 
         if (loadTeamPort.loadTeamByName(command.getName()).isPresent()) {
             throw new DuplicateTeamNameException(MessageFormat.format("This team name already exists - {0}", command.getName()));

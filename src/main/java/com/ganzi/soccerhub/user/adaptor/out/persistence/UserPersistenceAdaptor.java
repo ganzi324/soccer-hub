@@ -44,8 +44,8 @@ class UserPersistenceAdaptor implements AddUserPort, LoadUserPort, PatchUserPort
     }
 
     @Override
-    public Optional<User> loadUserById(Long id) {
-        return userRepository.findById(id).map(userMapper::mapToDomainEntity);
+    public Optional<User> loadUserById(User.UserId id) {
+        return userRepository.findById(id.value()).map(userMapper::mapToDomainEntity);
     }
 
     @Override
