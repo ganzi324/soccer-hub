@@ -33,6 +33,9 @@ jwt:
 #  access_expired_time: 3600000
 #  refresh_expired_time: 840000000
 
+hashids:
+  salt: y32yn9af5iav50ul
+
 logging:
   config: classpath:log4j2.yml
 #  file:
