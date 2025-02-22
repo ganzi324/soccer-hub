@@ -2,6 +2,7 @@ package com.ganzi.soccerhub.user.adaptor.in.web;
 
 import com.ganzi.soccerhub.auth.SessionUser;
 import com.ganzi.soccerhub.common.WebAdaptor;
+import com.ganzi.soccerhub.common.infra.hashid.HashId;
 import com.ganzi.soccerhub.common.web.ApiResponse;
 import com.ganzi.soccerhub.user.application.exception.UserNotFoundException;
 import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +25,7 @@ class GetUserController {
     private final GetUserQuery getUserQuery;
 
     @GetMapping("/{id}")
-    ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable("id") Long id) {
+    ResponseEntity<ApiResponse<UserResponse>> getUserById(@HashId("id") Long id) {
         User user = getUserQuery.getUserById(UserId.of(id)).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(ApiResponse.ok(UserResponse.of(user)));
     }
