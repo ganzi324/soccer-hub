@@ -14,6 +14,7 @@ public class AddUserCommand extends SelfValidating<AddUserCommand> {
     private final String name;
 
     @Email
+    @NotNull
     private final String email;
 
     @Password(message = "대문자, 숫자, 특수문자가 하나 이상 포함된 8~50자 비밀번호")
