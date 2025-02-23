@@ -37,6 +37,8 @@ hashids:
   salt: y32yn9af5iav50ul
 
 logging:
+  level:
+    org.springframework.security: DEBUG
   config: classpath:log4j2.yml
 #  file:
 #    name: ${user.dir}/log/test.log
