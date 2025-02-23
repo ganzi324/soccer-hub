@@ -5,11 +5,15 @@ import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.deser.BeanDeserializerBuilder;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class HashIdBeanDeserializerModifier extends BeanDeserializerModifier {
@@ -17,31 +21,27 @@ public class HashIdBeanDeserializerModifier extends BeanDeserializerModifier {
     private final HashIdService hashIdService;
 
     @Override
-    public JsonDeserializer<?> modifyDeserializer(DeserializationConfig config,
-                                                  BeanDescription beanDesc,
-                                                  JsonDeserializer<?> deserializer) {
-        return new StdDeserializer<>(deserializer.handledType()) {
-            @Override
-            public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-                Object instance = deserializer.deserialize(p, ctxt);
+    public BeanDeserializerBuilder updateBuilder(DeserializationConfig config, BeanDescription beanDesc, BeanDeserializerBuilder builder) {
+        List<SettableBeanProperty> properties = new ArrayList<>();
+        builder.getProperties().forEachRemaining(properties::add);
 
-                // @HashId가 붙은 필드에 대해 HashIdDeserializer 적용
-                beanDesc.findProperties().forEach(prop -> {
-                    if (prop.getField().getAnnotation(HashId.class) != null && prop.getField().getDeclaringClass() == Long.class) {
-                        try {
-                            String encodedId = (String) prop.getGetter().call1(instance);
-                            if (encodedId != null) {
-                                Long decodedId = hashIdService.decode(encodedId);
-                                prop.getSetter().setValue(instance, decodedId);
-                            }
-                        } catch (Exception e) {
-                            throw new RuntimeException("Failed to decode HashId", e);
-                        }
-                    }
-                });
-
-                return instance;
+        for (SettableBeanProperty property : properties) {
+            if (!property.getType().hasRawClass(Long.class)) {
+                continue;
             }
-        };
+
+            Optional.ofNullable(property.getAnnotation(HashId.class))
+                    .ifPresent(annotation -> {
+                        SettableBeanProperty newProperty = property.withValueDeserializer(new JsonDeserializer<Long>() {
+                            @Override
+                            public Long deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+                                return hashIdService.decode(p.getValueAsString());
+                            }
+                        });
+                        builder.addProperty(newProperty);
+                    });
+        }
+
+        return builder;
     }
 }
