@@ -49,6 +49,24 @@ public class JwtAuthProvider {
                 .compact();
     }
 
+    public String generateRefreshToken(Map<String, Object> claims) {
+        return generateRefreshToken(claims, getRefreshTokenExpiresAt());
+    }
+
+    public String generateRefreshToken(Map<String, Object> claims, Instant expiresAt) {
+        return Jwts.builder()
+                .header()
+                .add(createHeaders())
+                .and()
+                .subject("accessToken")
+                .claim("iss", "off")
+                .claims(claims)
+                .expiration(Date.from(expiresAt))
+                .issuedAt(new Date())
+                .signWith(key)
+                .compact();
+    }
+
     public SessionUser getSessionUser(String token) {
         Claims claims = parseClaims(token);
 
@@ -57,6 +75,10 @@ public class JwtAuthProvider {
                 claims.get(EMAIL, String.class),
                 JwtClaimConverter.namesToRoles(objectMapper.convertValue(claims.get(AUTHORITY), new TypeReference<>() {}))
         );
+    }
+
+    public Instant getRefreshTokenExpiresAt() {
+        return Instant.now().plusSeconds(properties.getRefreshExpiredTime());
     }
 
     private Jws<Claims> parseToken(String token) {
