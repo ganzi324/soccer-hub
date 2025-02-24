@@ -1,5 +1,6 @@
 package com.ganzi.soccerhub.auth;
 
+import com.ganzi.soccerhub.auth.application.port.in.AddRefreshTokenUseCase;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,17 +28,20 @@ public class SecurityConfiguration {
     private final CustomOAuth2UserService customOauth2UserService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthProvider jwtAuthProvider;
+    private final AddRefreshTokenUseCase addRefreshTokenUseCase;
 
     public SecurityConfiguration(
             AuthenticationConfiguration authenticationConfiguration,
             CustomOAuth2UserService customOauth2UserService,
             @Qualifier("delegatedAuthenticationEntryPoint") AuthenticationEntryPoint authenticationEntryPoint,
-            JwtAuthProvider jwtAuthProvider
+            JwtAuthProvider jwtAuthProvider,
+            AddRefreshTokenUseCase addRefreshTokenUseCase
     ) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.customOauth2UserService = customOauth2UserService;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.jwtAuthProvider = jwtAuthProvider;
+        this.addRefreshTokenUseCase = addRefreshTokenUseCase;
     }
 
     @Bean
@@ -65,7 +69,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtAuthProvider), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(new LoginAuthenticationFilter(authenticationManager(), jwtAuthProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginAuthenticationFilter(authenticationManager(), jwtAuthProvider, addRefreshTokenUseCase), UsernamePasswordAuthenticationFilter.class)
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/")
                 )
