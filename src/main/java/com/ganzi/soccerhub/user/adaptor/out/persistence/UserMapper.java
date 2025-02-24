@@ -5,9 +5,9 @@ import com.ganzi.soccerhub.user.domain.User.UserId;
 import org.springframework.stereotype.Component;
 
 @Component
-class UserMapper {
+public class UserMapper {
 
-    User mapToDomainEntity(UserJpaEntity user) {
+    public User mapToDomainEntity(UserJpaEntity user) {
         return User.withId(
                 new UserId(user.getId()),
                 user.getName(),
@@ -19,7 +19,7 @@ class UserMapper {
         );
     }
 
-    UserJpaEntity mapToJpaEntity(User user) {
+    public UserJpaEntity mapToJpaEntity(User user) {
         UserJpaEntity userJpaEntity = new UserJpaEntity(
                 null,
                 user.getName(),
