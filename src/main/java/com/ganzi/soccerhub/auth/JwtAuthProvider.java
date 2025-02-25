@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ganzi.soccerhub.auth.exception.InvalidTokenException;
 import com.ganzi.soccerhub.common.property.JwtProviderProperties;
+import com.ganzi.soccerhub.user.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -16,6 +17,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -23,6 +25,9 @@ public class JwtAuthProvider {
     public static final String AUDIENCE = "userId";
     public static final String EMAIL = "email";
     public static final String AUTHORITY = "auth";
+
+    private static final String SUBJECT_ACCESS_TOKEN = "accessToken";
+    private static final String SUBJECT_REFRESH_TOKEN = "refreshToken";
 
     private final JwtProviderProperties properties;
     private final Key key;
@@ -36,17 +41,7 @@ public class JwtAuthProvider {
     }
 
     public String generateAccessToken(Map<String, Object> claims) {
-        return Jwts.builder()
-                .header()
-                .add(createHeaders())
-                .and()
-                .subject("accessToken")
-                .claim("iss", "off")
-                .claims(claims)
-                .expiration(Date.from(Instant.now().plusSeconds(properties.getAccessExpiredTime())))
-                .issuedAt(new Date())
-                .signWith(key)
-                .compact();
+        return generateToken(SUBJECT_ACCESS_TOKEN, claims, getAccessTokenExpiredAt());
     }
 
     public String generateRefreshToken(Map<String, Object> claims) {
@@ -54,17 +49,7 @@ public class JwtAuthProvider {
     }
 
     public String generateRefreshToken(Map<String, Object> claims, Instant expiresAt) {
-        return Jwts.builder()
-                .header()
-                .add(createHeaders())
-                .and()
-                .subject("accessToken")
-                .claim("iss", "off")
-                .claims(claims)
-                .expiration(Date.from(expiresAt))
-                .issuedAt(new Date())
-                .signWith(key)
-                .compact();
+        return generateToken(SUBJECT_REFRESH_TOKEN, claims, expiresAt);
     }
 
     public SessionUser getSessionUser(String token) {
@@ -77,8 +62,35 @@ public class JwtAuthProvider {
         );
     }
 
+    public Map<String, Object> getClaimsByUser(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(AUDIENCE, user.getId().get().value());
+        claims.put(EMAIL, user.getEmail());
+        claims.put(AUTHORITY, JwtClaimConverter.roleNamesFromUserRoles(Set.of(user.getUserRole())));
+
+        return claims;
+    }
+
     public Instant getRefreshTokenExpiresAt() {
         return Instant.now().plusSeconds(properties.getRefreshExpiredTime());
+    }
+
+    private Instant getAccessTokenExpiredAt() {
+        return Instant.now().plusSeconds(properties.getAccessExpiredTime());
+    }
+
+    private String generateToken(String subject, Map<String, Object> claims, Instant expiresAt) {
+        return Jwts.builder()
+                .header()
+                .add(createHeaders())
+                .and()
+                .subject(subject)
+                .claim("iss", "off")
+                .claims(claims)
+                .expiration(Date.from(expiresAt))
+                .issuedAt(new Date())
+                .signWith(key)
+                .compact();
     }
 
     private Jws<Claims> parseToken(String token) {
@@ -87,16 +99,14 @@ public class JwtAuthProvider {
                     .verifyWith((SecretKey) key)
                     .build()
                     .parseSignedClaims(token);
-        } catch (SecurityException | MalformedJwtException e) {
+        } catch (SecurityException | MalformedJwtException | IllegalArgumentException e) {
+            log.info(e.getMessage());
             throw new InvalidTokenException();
         } catch (ExpiredJwtException e) {
-            // expired
+            log.info("Token Expiration. (User Id : {})", e.getClaims().get(AUDIENCE));
             throw new InvalidTokenException();
         } catch (UnsupportedJwtException e) {
-            // unsupported
-            throw new InvalidTokenException();
-        } catch (IllegalArgumentException e) {
-            // empty
+            log.info("Unsupported jwt Unsecured JWSs.");
             throw new InvalidTokenException();
         }
     }
@@ -110,5 +120,4 @@ public class JwtAuthProvider {
         headers.put("typ", "JWT");
         return headers;
     }
-
 }
