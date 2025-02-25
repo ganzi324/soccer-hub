@@ -7,7 +7,12 @@ import lombok.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "refresh_token")
+@Table(
+        name = "refresh_token",
+        indexes = {
+                @Index(name = "idx_refresh_token_user", columnList = "user_id, token")
+        }
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
