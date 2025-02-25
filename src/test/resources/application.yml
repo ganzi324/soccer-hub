@@ -19,8 +19,8 @@ spring:
 
 jwt:
   secret_key: 685891EAE6DA6C33CC5CAEAE6A6A2D3SDDFC3DFEBABCDA3F9
-#  access_expired_time: 3600000
-#  refresh_expired_time: 840000000
+  access_expired_time: 30
+  refresh_expired_time: 60
 
 logging:
   level:
