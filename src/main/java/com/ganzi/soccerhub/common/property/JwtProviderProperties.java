@@ -9,6 +9,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 public class JwtProviderProperties {
     private final String secretKey;
-    private final long accessExpiredTime = 60 * 60L;
-    private final long refreshExpiredTime = 7 * 24 * 60 * 60L;
+    private final long accessExpiredTime;
+    private final long refreshExpiredTime;
 }
