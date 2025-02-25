@@ -16,6 +16,12 @@ class JwtClaimConverter {
                 .collect(Collectors.toSet());
     }
 
+    public static Set<String> roleNamesFromUserRoles(Set<UserRole> userRoles) {
+        return userRoles.stream()
+                .map(UserRole::getCode)
+                .collect(Collectors.toSet());
+    }
+
     public static Set<UserRole> namesToRoles(List<String> roleNames) {
         return roleNames.stream()
                 .map(UserRole::fromCode)
