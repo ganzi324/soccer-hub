@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor
-public class RefreshTokenService implements AddRefreshTokenUseCase {
+public class AddRefreshTokenService implements AddRefreshTokenUseCase {
 
     private final AddRefreshTokenPort addRefreshTokenPort;
     private final GetUserQuery getUserQuery;
