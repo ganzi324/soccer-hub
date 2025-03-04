@@ -7,6 +7,7 @@ import com.ganzi.soccerhub.user.application.exception.UserNotFoundException;
 import com.ganzi.soccerhub.user.application.port.in.PatchUserUseCase;
 import com.ganzi.soccerhub.user.application.port.out.PatchUserPort;
 import com.ganzi.soccerhub.user.domain.User;
+import com.ganzi.soccerhub.user.domain.User.UserId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +28,7 @@ public class PatchUserService implements PatchUserUseCase {
             throw new UnauthorizedException();
         }
 
-        User user = getUserService.getUserById(command.getId()).orElseThrow(UserNotFoundException::new);
+        User user = getUserService.getUserById(UserId.of(command.getId())).orElseThrow(UserNotFoundException::new);
         User updatedUser = user.update(command.toUpdateVo());
         patchUserPort.patch(updatedUser);
 

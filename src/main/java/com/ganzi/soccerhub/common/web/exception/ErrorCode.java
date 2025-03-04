@@ -13,7 +13,10 @@ public enum ErrorCode {
     INVALID_REQUEST_PARAMETER(HttpStatus.BAD_REQUEST, "유효하지 않은 파라미터가 포함되어 있습니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "접근 권한이 없습니다."),
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
+    DUPLICATE_TEAM_NAME(HttpStatus.BAD_REQUEST, "팀명 중복"),
+    BEARER_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "갱신 토큰이 없습니다.");
+
 
     private final HttpStatus status;
     private final String message;

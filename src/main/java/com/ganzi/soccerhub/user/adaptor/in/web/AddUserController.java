@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @WebAdaptor
-@RestController
+@RestController("/v1/users")
 @RequiredArgsConstructor
 class AddUserController {
 
     private final AddUserUseCase addUserUseCase;
 
-    @PostMapping(path = "/users")
+    @PostMapping
     void addUser(@RequestBody AddUserRequest requestDto) {
         AddUserCommand command = AddUserCommand.createNormalUser(
                 requestDto.getName(),
