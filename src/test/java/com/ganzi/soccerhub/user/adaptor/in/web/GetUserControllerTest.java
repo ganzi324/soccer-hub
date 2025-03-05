@@ -2,6 +2,7 @@ package com.ganzi.soccerhub.user.adaptor.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ganzi.soccerhub.common.UserTestData;
+import com.ganzi.soccerhub.common.infra.hashid.HashIdService;
 import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
 import com.ganzi.soccerhub.user.application.response.UserResponse;
 import com.ganzi.soccerhub.user.domain.User;
@@ -35,6 +36,9 @@ class GetUserControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
+    private HashIdService hashIdService;
+
     private JacksonTester<UserResponse> json;
 
     @BeforeAll
@@ -50,6 +54,8 @@ class GetUserControllerTest {
         // given
         given(getUserQuery.getUserById(any(User.UserId.class)))
                 .willReturn(Optional.of(user));
+        given(hashIdService.decode(any(String.class)))
+                .willReturn(1L);
 
         // when
         MockHttpServletResponse response = mvc.perform(
