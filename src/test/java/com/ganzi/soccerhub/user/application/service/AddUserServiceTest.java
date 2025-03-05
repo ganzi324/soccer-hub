@@ -31,14 +31,14 @@ public class AddUserServiceTest {
     );
 
     @Test
-    void addUserSuccess() {
+    void addNormalUserSuccess() {
         User user = UserTestData.defaultUser();
 
         givenLoadUserWillSucceed(user);
         givenSaveUserWillSucceed(user);
         givenEncodeWillSuccess();
 
-        AddUserCommand command = new AddUserCommand(user.getName(), user.getEmail(), user.getPassword(), user.getPicture(), user.getUserType());
+        AddUserCommand command = AddUserCommand.createNormalUser(user.getName(), user.getEmail(), user.getPassword());
         assertThat(addUserUseCase.addUser(command)).isEqualTo(user.getId().get().value());
     }
 

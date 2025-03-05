@@ -101,7 +101,7 @@ class RefreshTokenServiceTest {
 
         AuthenticationTokens authTokens = renewAccessTokenUseCase.execute(validRefreshToken);
 
-        assertThat(jwtAuthProvider.getSessionUser(authTokens.refreshToken()).email()).isEqualTo(user.getEmail());
+        assertThat(jwtAuthProvider.getSessionUser(authTokens.refreshToken()).email()).isEqualTo(user.getName());
     }
 
     private void givenLoadUserWillSucceed(User user) {

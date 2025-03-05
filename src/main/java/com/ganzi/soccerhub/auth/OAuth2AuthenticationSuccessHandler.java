@@ -41,7 +41,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map<String, Object> attributes = principalInfo.getAttributes();
         return Map.of(
                 JwtAuthProvider.AUDIENCE, attributes.get(JwtAuthProvider.AUDIENCE),
-                JwtAuthProvider.EMAIL, attributes.get("email"),
+                JwtAuthProvider.USERNAME, attributes.get("name"),
                 JwtAuthProvider.AUTHORITY, JwtClaimConverter.extractRoleNames(principalInfo.getAuthorities())
         );
     }

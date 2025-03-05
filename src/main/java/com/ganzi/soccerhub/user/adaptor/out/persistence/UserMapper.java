@@ -10,6 +10,7 @@ public class UserMapper {
     public User mapToDomainEntity(UserJpaEntity user) {
         return User.withId(
                 new UserId(user.getId()),
+                user.getUserKey(),
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
@@ -22,6 +23,7 @@ public class UserMapper {
     public UserJpaEntity mapToJpaEntity(User user) {
         UserJpaEntity userJpaEntity = new UserJpaEntity(
                 null,
+                user.getUserKey(),
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),

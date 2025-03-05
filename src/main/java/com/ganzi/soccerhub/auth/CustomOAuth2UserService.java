@@ -50,7 +50,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User user = saveOrUpdate(attributes);
 
-        Map<String, Object> newAttributes = new HashMap<>(attributes.attributes());
+        Map<String, Object> newAttributes = new HashMap<>(attributes.getAttributes());
         newAttributes.put(AUDIENCE, user.getId().get().value());
 
         return new PrincipalInfo(
@@ -61,12 +61,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {
-        Optional<User> currentUser = getUserQuery.getUserByEmail(attributes.email());
+        Optional<User> currentUser = getUserQuery.getUserByUserKey(attributes.providerId());
         if (currentUser.isPresent()) {
             return currentUser.get();
         }
 
         AddUserCommand command = AddUserCommand.createSnsUser(
+                attributes.providerId(),
                 attributes.name(),
                 attributes.email(),
                 attributes.picture(),

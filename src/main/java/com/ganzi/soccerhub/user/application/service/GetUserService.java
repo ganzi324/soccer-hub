@@ -23,4 +23,9 @@ class GetUserService implements GetUserQuery {
     public Optional<User> getUserById(User.UserId id) {
         return loadUserPort.loadUserById(id);
     }
+
+    @Override
+    public Optional<User> getUserByUserKey(String userKey) {
+        return loadUserPort.loadUserByUserKey(userKey);
+    }
 }
