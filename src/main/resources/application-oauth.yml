@@ -4,13 +4,13 @@ spring:
       client:
         registration:
           google:
-            client-id: 697889968185-amc5gbliqdru90admji75vgb3t3tee0u.apps.googleusercontent.com
-            client-secret: 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
+            client-id: 709169614877-n64a0oplavoe2942f4mo7t3s9cf5a7m7.apps.googleusercontent.com
+            client-secret: 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
             scope: profile,email
           naver:
-            client-id: MWdMoq4vuoyEBlO1FIFi
-            client-secret: KyRuxkuF7g
-            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+            client-id: M_9UjHNPguFP0yLftpGW
+            client-secret: bPliWFhW1J
+            redirect-uri: http://localhost:8080/api/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope: name,email,profile_image
             client-name: Naver
