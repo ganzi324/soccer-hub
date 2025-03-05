@@ -2,13 +2,11 @@ package com.ganzi.soccerhub.auth;
 
 import com.ganzi.soccerhub.auth.dto.OAuthAttributes;
 import com.ganzi.soccerhub.auth.dto.PrincipalInfo;
-import com.ganzi.soccerhub.auth.dto.SessionUser;
 import com.ganzi.soccerhub.user.application.command.AddUserCommand;
 import com.ganzi.soccerhub.user.application.port.in.AddUserUseCase;
 import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
 import com.ganzi.soccerhub.user.domain.User;
 import com.ganzi.soccerhub.user.domain.UserType;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -20,15 +18,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+
+import static com.ganzi.soccerhub.auth.JwtAuthProvider.AUDIENCE;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final GetUserQuery getUserQuery;
-//    private final AddUserUseCase addUserUseCase;
-    private final HttpSession httpSession;
+    private final AddUserUseCase addUserUseCase;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -49,11 +50,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User user = saveOrUpdate(attributes);
 
-        httpSession.setAttribute("user", new SessionUser(user));
+        Map<String, Object> newAttributes = new HashMap<>(attributes.attributes());
+        newAttributes.put(AUDIENCE, user.getId().get().value());
 
         return new PrincipalInfo(
                 Collections.singleton(new SimpleGrantedAuthority(user.getUserRole().getCode())),
-                attributes.attributes(),
+                newAttributes,
                 userNameAttributeName
         );
     }
@@ -70,7 +72,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 attributes.picture(),
                 UserType.from(attributes.registrationId())
         );
-//        addUserUseCase.addUser(command);
+        addUserUseCase.addUser(command);
 
         return getUserQuery.getUserByEmail(attributes.email()).get();
     }
