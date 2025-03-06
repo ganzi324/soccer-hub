@@ -21,8 +21,8 @@ public class UserMapper {
     }
 
     public UserJpaEntity mapToJpaEntity(User user) {
-        UserJpaEntity userJpaEntity = new UserJpaEntity(
-                null,
+        return new UserJpaEntity(
+                user.getId().map(UserId::value).orElse(null),
                 user.getUserKey(),
                 user.getName(),
                 user.getEmail(),
@@ -31,9 +31,6 @@ public class UserMapper {
                 user.getUserRole(),
                 user.getUserType()
         );
-        user.getId().ifPresent(userId -> userJpaEntity.setId(userId.value()));
-
-        return userJpaEntity;
     }
 
 }

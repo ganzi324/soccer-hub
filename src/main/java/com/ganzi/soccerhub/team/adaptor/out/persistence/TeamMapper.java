@@ -18,15 +18,13 @@ class TeamMapper {
     }
 
     TeamJpaEntity mapToJpaEntity(Team team) {
-        TeamJpaEntity teamJpaEntity = new TeamJpaEntity(
-                null,
+        return new TeamJpaEntity(
+                team.getId().map(Team.TeamId::value).orElse(null),
                 team.getName(),
                 team.isPrivate(),
                 team.getDescription(),
                 team.getCreatedBy().value()
         );
-        team.getId().ifPresent(teamId -> teamJpaEntity.setId(teamId.value()));
-        return teamJpaEntity;
     }
 
 }
