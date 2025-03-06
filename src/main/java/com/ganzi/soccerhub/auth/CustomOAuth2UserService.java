@@ -18,11 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-
-import static com.ganzi.soccerhub.auth.JwtAuthProvider.AUDIENCE;
 
 @RequiredArgsConstructor
 @Transactional
@@ -50,18 +46,18 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User user = saveOrUpdate(attributes);
 
-        Map<String, Object> newAttributes = new HashMap<>(attributes.getAttributes());
-        newAttributes.put(AUDIENCE, user.getId().get().value());
-
         return new PrincipalInfo(
                 Collections.singleton(new SimpleGrantedAuthority(user.getUserRole().getCode())),
-                newAttributes,
-                userNameAttributeName
+                attributes.getAttributes(),
+                userNameAttributeName,
+                user
         );
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {
-        Optional<User> currentUser = getUserQuery.getUserByUserKey(attributes.providerId());
+        String userKey = attributes.registrationId() + "_" + attributes.providerId();
+
+        Optional<User> currentUser = getUserQuery.getUserByUserKey(userKey);
         if (currentUser.isPresent()) {
             return currentUser.get();
         }
@@ -73,8 +69,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 attributes.picture(),
                 UserType.from(attributes.registrationId())
         );
-        addUserUseCase.addUser(command);
-
-        return getUserQuery.getUserByEmail(attributes.email()).get();
+        return addUserUseCase.addUser(command);
     }
 }

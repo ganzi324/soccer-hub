@@ -39,7 +39,7 @@ public class AddUserServiceTest {
         givenEncodeWillSuccess();
 
         AddUserCommand command = AddUserCommand.createNormalUser(user.getName(), user.getEmail(), user.getPassword());
-        assertThat(addUserUseCase.addUser(command)).isEqualTo(user.getId().get().value());
+        assertThat(addUserUseCase.addUser(command)).isEqualTo(user);
     }
 
     private void givenLoadUserWillSucceed(User user) {

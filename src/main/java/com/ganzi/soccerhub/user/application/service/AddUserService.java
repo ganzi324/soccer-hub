@@ -21,7 +21,7 @@ public class AddUserService implements AddUserUseCase {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Long addUser(AddUserCommand command) {
+    public User addUser(AddUserCommand command) {
         User user = User.withoutId(
                 command.getUserKey(),
                 command.getName(),
@@ -35,7 +35,7 @@ public class AddUserService implements AddUserUseCase {
 
         checkDuplication(user);
 
-        return addUserPort.save(user).getId().get().value();
+        return addUserPort.save(user);
     }
 
     private void checkDuplication(User user) {
