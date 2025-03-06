@@ -26,24 +26,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         PrincipalInfo principalInfo = (PrincipalInfo) authentication.getPrincipal();
 
-        Map<String, Object> claims = createClaims(principalInfo);
+        Map<String, Object> claims = createClaims(principalInfo.user());
         String accessToken = generateAccessToken(claims);
 
         Instant refreshTokenExpiration = jwtAuthProvider.getRefreshTokenExpiresAt();
         String refreshToken = generateRefreshToken(claims, refreshTokenExpiration);
 
-        saveRefreshToken(principalInfo.getAttribute(JwtAuthProvider.AUDIENCE), refreshToken, refreshTokenExpiration);
+        saveRefreshToken(principalInfo.user().getId().get(), refreshToken, refreshTokenExpiration);
 
         sendTokensInResponse(response, accessToken, refreshToken);
     }
 
-    private Map<String, Object> createClaims(PrincipalInfo principalInfo) {
-        Map<String, Object> attributes = principalInfo.getAttributes();
-        return Map.of(
-                JwtAuthProvider.AUDIENCE, attributes.get(JwtAuthProvider.AUDIENCE),
-                JwtAuthProvider.USERNAME, attributes.get("name"),
-                JwtAuthProvider.AUTHORITY, JwtClaimConverter.extractRoleNames(principalInfo.getAuthorities())
-        );
+    private Map<String, Object> createClaims(User user) {
+        return jwtAuthProvider.getClaimsByUser(user);
     }
 
     private String generateAccessToken(Map<String, Object> claims) {
@@ -54,8 +49,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return jwtAuthProvider.generateRefreshToken(claims, refreshTokenExpiration);
     }
 
-    private void saveRefreshToken(Long userId, String refreshToken, Instant expiredAt) {
-        AddRefreshTokenCommand command = new AddRefreshTokenCommand(new User.UserId(userId), refreshToken, expiredAt);
+    private void saveRefreshToken(User.UserId userId, String refreshToken, Instant expiredAt) {
+        AddRefreshTokenCommand command = new AddRefreshTokenCommand(userId, refreshToken, expiredAt);
         addRefreshTokenUseCase.addRefreshToken(command);
     }
 
