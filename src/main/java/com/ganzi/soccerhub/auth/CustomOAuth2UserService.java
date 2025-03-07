@@ -2,13 +2,11 @@ package com.ganzi.soccerhub.auth;
 
 import com.ganzi.soccerhub.auth.dto.OAuthAttributes;
 import com.ganzi.soccerhub.auth.dto.PrincipalInfo;
-import com.ganzi.soccerhub.auth.dto.SessionUser;
 import com.ganzi.soccerhub.user.application.command.AddUserCommand;
 import com.ganzi.soccerhub.user.application.port.in.AddUserUseCase;
 import com.ganzi.soccerhub.user.application.port.in.GetUserQuery;
 import com.ganzi.soccerhub.user.domain.User;
 import com.ganzi.soccerhub.user.domain.UserType;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -27,8 +25,7 @@ import java.util.Optional;
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final GetUserQuery getUserQuery;
-//    private final AddUserUseCase addUserUseCase;
-    private final HttpSession httpSession;
+    private final AddUserUseCase addUserUseCase;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -49,29 +46,29 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         User user = saveOrUpdate(attributes);
 
-        httpSession.setAttribute("user", new SessionUser(user));
-
         return new PrincipalInfo(
                 Collections.singleton(new SimpleGrantedAuthority(user.getUserRole().getCode())),
-                attributes.attributes(),
-                userNameAttributeName
+                attributes.getAttributes(),
+                userNameAttributeName,
+                user
         );
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {
-        Optional<User> currentUser = getUserQuery.getUserByEmail(attributes.email());
+        String userKey = attributes.registrationId() + "_" + attributes.providerId();
+
+        Optional<User> currentUser = getUserQuery.getUserByUserKey(userKey);
         if (currentUser.isPresent()) {
             return currentUser.get();
         }
 
         AddUserCommand command = AddUserCommand.createSnsUser(
+                attributes.providerId(),
                 attributes.name(),
                 attributes.email(),
                 attributes.picture(),
                 UserType.from(attributes.registrationId())
         );
-//        addUserUseCase.addUser(command);
-
-        return getUserQuery.getUserByEmail(attributes.email()).get();
+        return addUserUseCase.addUser(command);
     }
 }

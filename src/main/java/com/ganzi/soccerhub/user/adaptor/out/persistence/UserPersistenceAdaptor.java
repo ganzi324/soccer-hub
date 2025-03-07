@@ -17,25 +17,10 @@ class UserPersistenceAdaptor implements AddUserPort, LoadUserPort, PatchUserPort
 
     @Override
     public User save(User user) {
-        UserJpaEntity userEntity = new UserJpaEntity();
-        userEntity.setName(user.getName());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setPassword(user.getPassword());
-        userEntity.setPicture(user.getPicture());
-        userEntity.setUserRole(user.getUserRole());
-        userEntity.setUserType(user.getUserType());
+        UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
+        userRepository.save(userJpaEntity);
 
-        userRepository.save(userEntity);
-
-        return User.withId(
-                new User.UserId(userEntity.getId()),
-                userEntity.getName(),
-                userEntity.getEmail(),
-                userEntity.getPassword(),
-                userEntity.getPicture(),
-                userEntity.getUserRole(),
-                userEntity.getUserType()
-            );
+        return userMapper.mapToDomainEntity(userJpaEntity);
     }
 
     @Override
@@ -46,6 +31,11 @@ class UserPersistenceAdaptor implements AddUserPort, LoadUserPort, PatchUserPort
     @Override
     public Optional<User> loadUserById(User.UserId id) {
         return userRepository.findById(id.value()).map(userMapper::mapToDomainEntity);
+    }
+
+    @Override
+    public Optional<User> loadUserByUserKey(String userKey) {
+        return userRepository.findByUserKey(userKey).map(userMapper::mapToDomainEntity);
     }
 
     @Override

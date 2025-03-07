@@ -1,15 +1,18 @@
 package com.ganzi.soccerhub.team.adaptor.out.persistence;
 
 import com.ganzi.soccerhub.common.TeamTestData;
+import com.ganzi.soccerhub.common.infra.persistence.JpaConfig;
 import com.ganzi.soccerhub.team.domain.Team;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import(JpaConfig.class)
 public class TeamPersistenceAdaptorTest {
 
     private TeamPersistenceAdaptor teamPersistenceAdaptor;

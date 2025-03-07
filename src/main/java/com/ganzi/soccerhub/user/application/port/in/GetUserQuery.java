@@ -8,4 +8,6 @@ public interface GetUserQuery {
     Optional<User> getUserByEmail(String email);
 
     Optional<User> getUserById(User.UserId id);
+
+    Optional<User> getUserByUserKey(String userKey);
 }

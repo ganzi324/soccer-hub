@@ -1,14 +1,15 @@
 package com.ganzi.soccerhub.auth.dto;
 
-import com.ganzi.soccerhub.user.domain.UserType;
 import lombok.Builder;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Builder
 public record OAuthAttributes(
         Map<String, Object> attributes,
         String registrationId,
+        String providerId,
         String name,
         String email,
         String picture
@@ -19,19 +20,28 @@ public record OAuthAttributes(
             String userNameAttributeName,
             Map<String, Object> attributes
     ) {
-        if (registrationId.equals(UserType.GOOGLE.getCode())) {
-            return ofGoogle(registrationId, userNameAttributeName, attributes);
-        }
-        if (registrationId.equals(UserType.NAVER.getCode())) {
-            return ofNaver(registrationId, userNameAttributeName, attributes);
-        }
+        return switch (registrationId.toLowerCase()) {
+            case "google" -> ofGoogle(registrationId, userNameAttributeName, attributes);
+            case "naver" -> ofNaver(registrationId, userNameAttributeName, attributes);
+            default -> throw new IllegalArgumentException("Unsupported provider: " + registrationId);
+        };
+    }
 
-        throw new IllegalStateException("Unexpected value: " + registrationId);
+    public Map<String, Object> getAttributes() {
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("providerId", providerId);
+        attributes.put("registrationId", registrationId);
+        attributes.put("name", name);
+        attributes.put("email", email);
+        attributes.put("picture", picture);
+
+        return attributes;
     }
 
     private static OAuthAttributes ofGoogle(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
                 .registrationId(registrationId)
+                .providerId((String) attributes.get("sub"))
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
@@ -44,6 +54,7 @@ public record OAuthAttributes(
 
         return OAuthAttributes.builder()
                 .registrationId(registrationId)
+                .providerId((String) response.get("id"))
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
                 .picture((String) response.get("profile_image"))

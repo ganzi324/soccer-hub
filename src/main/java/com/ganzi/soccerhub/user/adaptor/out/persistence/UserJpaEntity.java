@@ -1,27 +1,32 @@
 package com.ganzi.soccerhub.user.adaptor.out.persistence;
 
+import com.ganzi.soccerhub.common.infra.persistence.BaseTimeEntity;
 import com.ganzi.soccerhub.user.domain.UserRole;
 import com.ganzi.soccerhub.user.domain.UserType;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "\"user\"")
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class UserJpaEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class UserJpaEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String userKey;
+
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column
     private String email;
 
     @Column

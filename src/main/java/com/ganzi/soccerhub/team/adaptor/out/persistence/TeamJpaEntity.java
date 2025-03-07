@@ -1,16 +1,18 @@
 package com.ganzi.soccerhub.team.adaptor.out.persistence;
 
+import com.ganzi.soccerhub.common.infra.persistence.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "team")
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class TeamJpaEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class TeamJpaEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

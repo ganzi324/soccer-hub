@@ -23,7 +23,7 @@ import java.util.Set;
 @Component
 public class JwtAuthProvider {
     public static final String AUDIENCE = "userId";
-    public static final String EMAIL = "email";
+    public static final String USERNAME = "name";
     public static final String AUTHORITY = "auth";
 
     private static final String SUBJECT_ACCESS_TOKEN = "accessToken";
@@ -57,7 +57,7 @@ public class JwtAuthProvider {
 
         return new SessionUser(
                 claims.get(AUDIENCE, Long.class),
-                claims.get(EMAIL, String.class),
+                claims.get(USERNAME, String.class),
                 JwtClaimConverter.namesToRoles(objectMapper.convertValue(claims.get(AUTHORITY), new TypeReference<>() {}))
         );
     }
@@ -65,7 +65,7 @@ public class JwtAuthProvider {
     public Map<String, Object> getClaimsByUser(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(AUDIENCE, user.getId().get().value());
-        claims.put(EMAIL, user.getEmail());
+        claims.put(USERNAME, user.getName());
         claims.put(AUTHORITY, JwtClaimConverter.roleNamesFromUserRoles(Set.of(user.getUserRole())));
 
         return claims;
