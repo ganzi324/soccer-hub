@@ -1,5 +1,6 @@
 package com.ganzi.soccerhub.auth.adaptor.out.persistence;
 
+import com.ganzi.soccerhub.common.infra.persistence.BaseTimeEntity;
 import com.ganzi.soccerhub.user.adaptor.out.persistence.UserJpaEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,10 +14,10 @@ import java.time.Instant;
                 @Index(name = "idx_refresh_token_user", columnList = "user_id, token")
         }
 )
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class RefreshTokenJpaEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class RefreshTokenJpaEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

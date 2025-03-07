@@ -22,6 +22,9 @@ jwt:
   access_expired_time: 30
   refresh_expired_time: 60
 
+hashids:
+  salt: y32yn9af5iav50ul
+
 logging:
   level:
     root: INFO

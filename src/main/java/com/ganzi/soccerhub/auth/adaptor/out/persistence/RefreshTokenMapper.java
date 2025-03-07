@@ -21,13 +21,11 @@ class RefreshTokenMapper {
     }
 
     RefreshTokenJpaEntity mapToJpaEntity(RefreshToken refreshToken) {
-        RefreshTokenJpaEntity refreshTokenJpaEntity = new RefreshTokenJpaEntity(
-                null,
+        return new RefreshTokenJpaEntity(
+                refreshToken.getId().map(RefreshToken.RefreshTokenId::value).orElse(null),
                 userMapper.mapToJpaEntity(refreshToken.getUser()),
                 refreshToken.getToken(),
                 refreshToken.getExpiresAt()
         );
-        refreshToken.getId().ifPresent(refreshTokenId -> refreshTokenJpaEntity.setId(refreshTokenId.value()));
-        return refreshTokenJpaEntity;
     }
 }

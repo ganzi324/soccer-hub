@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                                 )
                 )
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/h2-console/**", "/v1/auth/**").permitAll()
+                        .requestMatchers("/h2-console/**", "/v1/auth/**", "/oauth2/authorization/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtAuthProvider), UsernamePasswordAuthenticationFilter.class)
@@ -75,6 +75,7 @@ public class SecurityConfiguration {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOauth2UserService))
+                        .successHandler(new OAuth2AuthenticationSuccessHandler(jwtAuthProvider, addRefreshTokenUseCase))
                 )
                 .httpBasic(withDefaults())
                 .exceptionHandling(configure -> configure.authenticationEntryPoint(authenticationEntryPoint));

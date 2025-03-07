@@ -8,4 +8,6 @@ public interface LoadUserPort {
     Optional<User> loadUserByEmail(String email);
 
     Optional<User> loadUserById(User.UserId id);
+
+    Optional<User> loadUserByUserKey(String userKey);
 }

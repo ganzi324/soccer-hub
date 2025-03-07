@@ -69,7 +69,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     private Map<String, Object> createClaims(AuthUser authUser) {
         return Map.of(
                 JwtAuthProvider.AUDIENCE, authUser.getId(),
-                JwtAuthProvider.EMAIL, authUser.getUsername(),
+                JwtAuthProvider.USERNAME, authUser.getUsername(),
                 JwtAuthProvider.AUTHORITY, JwtClaimConverter.extractRoleNames(authUser.getAuthorities())
         );
     }
