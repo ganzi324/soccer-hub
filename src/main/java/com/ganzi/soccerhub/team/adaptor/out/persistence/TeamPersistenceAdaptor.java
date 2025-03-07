@@ -5,6 +5,7 @@ import com.ganzi.soccerhub.team.application.port.out.AddTeamPort;
 import com.ganzi.soccerhub.team.application.port.out.LoadTeamPort;
 import com.ganzi.soccerhub.team.domain.Team;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ public class TeamPersistenceAdaptor implements LoadTeamPort, AddTeamPort {
     private final TeamMapper teamMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Team> loadTeamByName(String name) {
         return teamRepository.findByName(name).map(teamMapper::mapToDomainEntity);
     }

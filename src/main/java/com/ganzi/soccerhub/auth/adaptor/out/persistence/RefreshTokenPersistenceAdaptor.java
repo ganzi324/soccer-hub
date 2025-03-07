@@ -6,6 +6,7 @@ import com.ganzi.soccerhub.auth.domain.RefreshToken;
 import com.ganzi.soccerhub.common.PersistenceAdapter;
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class RefreshTokenPersistenceAdaptor implements AddRefreshTokenPort, Load
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<RefreshToken> loadByUserIdAndToken(User.UserId userId, String token) {
         Optional<RefreshTokenJpaEntity> jpaEntity = refreshTokenRepository.findByUserIdAndToken(userId.value(), token);
         return jpaEntity.map(refreshTokenMapper::mapToDomainEntity);

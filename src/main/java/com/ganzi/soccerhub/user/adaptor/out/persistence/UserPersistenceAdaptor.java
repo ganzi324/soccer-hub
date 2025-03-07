@@ -6,6 +6,7 @@ import com.ganzi.soccerhub.user.application.port.out.LoadUserPort;
 import com.ganzi.soccerhub.user.application.port.out.PatchUserPort;
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -39,11 +40,13 @@ class UserPersistenceAdaptor implements AddUserPort, LoadUserPort, PatchUserPort
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<User> loadUserByEmail(String email) {
         return userRepository.findByEmail(email).map(userMapper::mapToDomainEntity);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<User> loadUserById(User.UserId id) {
         return userRepository.findById(id.value()).map(userMapper::mapToDomainEntity);
     }
