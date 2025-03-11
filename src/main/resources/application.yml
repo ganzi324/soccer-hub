@@ -12,18 +12,25 @@ spring:
     include: oauth
 
   jpa:
-    show_sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
+    show_sql: true
 
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL
-
-  h2:
-    console:
-      enabled: true
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/soccerhub?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      username: root
+      password: Qwer1234!
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3307/soccerhub?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      username: root
+      password: Qwer1234!
 
   session:
     store-type: jdbc
