@@ -2,6 +2,7 @@ package com.ganzi.soccerhub.place.application.command;
 
 import com.ganzi.soccerhub.common.SelfValidating;
 import com.ganzi.soccerhub.place.domain.Address;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
@@ -9,22 +10,27 @@ import lombok.Getter;
 public class AddPlaceCommand extends SelfValidating<AddPlaceCommand> {
 
     @Size(min = 1, max = 20, message = "이름은 1~20 글자여야 합니다.")
+    @NotBlank
     private final String name;
 
     private final String description;
 
     @Size(min = 1, max = 20)
+    @NotBlank
     private final String state;
 
     @Size(min = 1, max = 50)
+    @NotBlank
     private final String city;
 
     @Size(min = 1, max = 100)
+    @NotBlank
     private final String street;
 
     private final String detailAddress;
 
     @Size(min = 1, max = 10)
+    @NotBlank
     private final String postalCode;
 
     private final double latitude;
