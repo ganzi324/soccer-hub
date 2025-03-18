@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface LoadPlacePort {
     List<Place> loadPlaceByName(String name);
+
+    List<Place> loadAllByIds(List<Long> ids);
 }

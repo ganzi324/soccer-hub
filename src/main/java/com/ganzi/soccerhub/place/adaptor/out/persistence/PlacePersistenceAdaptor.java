@@ -28,6 +28,16 @@ class PlacePersistenceAdaptor implements AddPlacePort, LoadPlacePort {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Place> loadAllByIds(List<Long> ids) {
+        List<PlaceJpaEntity> placeJpaEntities = placeRepository.findAllById(ids);
+
+        return placeJpaEntities.stream()
+                .map(placeMapper::mapToDomainEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Place save(Place place) {
         PlaceJpaEntity placeJpaEntity = placeMapper.mapToJpaEntity(place);
         placeRepository.save(placeJpaEntity);
