@@ -16,7 +16,8 @@ public enum ErrorCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
     DUPLICATE_TEAM_NAME(HttpStatus.BAD_REQUEST, "팀명 중복"),
     BEARER_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "갱신 토큰이 없습니다."),
-    DUPLICATE_PLACE(HttpStatus.BAD_REQUEST, "동일한 이름, 주소의 장소가 있습니다.");
+    DUPLICATE_PLACE(HttpStatus.BAD_REQUEST, "동일한 이름, 주소의 장소가 있습니다."),
+    PLACE_NOT_FOUND(HttpStatus.BAD_REQUEST, "장소를 찾을 수 없습니다.");
 
 
     private final HttpStatus status;
