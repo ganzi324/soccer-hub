@@ -24,7 +24,7 @@ class AddTravelMatePostController {
     private final AddTravelMatePostUseCase addTravelMatePostUseCase;
 
     @PostMapping
-    ResponseEntity<ApiResponse<Long>> addTravelMatePost(@RequestBody AddTravelMatePostRequest request, @AuthenticationPrincipal SessionUser sessionUser) {
+    ResponseEntity<ApiResponse<AddTravelMatePostResponse>> addTravelMatePost(@RequestBody AddTravelMatePostRequest request, @AuthenticationPrincipal SessionUser sessionUser) {
         AddTravelMatePostCommand command = new AddTravelMatePostCommand(
                 request.getTitle(),
                 request.getStartDate(),
@@ -38,7 +38,7 @@ class AddTravelMatePostController {
         );
 
         TravelMatePost travelMatePost = addTravelMatePostUseCase.addTravelMatePost(command);
-        return ResponseEntity.ok(ApiResponse.ok(travelMatePost.getId().get().value()));
+        return ResponseEntity.ok(ApiResponse.ok(AddTravelMatePostResponse.of(travelMatePost.getId().get())));
     }
 
 }
