@@ -2,6 +2,7 @@ package com.ganzi.soccerhub.trip.application.command;
 
 import com.ganzi.soccerhub.common.SelfValidating;
 import com.ganzi.soccerhub.trip.domain.AgeRange;
+import com.ganzi.soccerhub.trip.domain.TravelMatePost;
 import com.ganzi.soccerhub.user.domain.Gender;
 import com.ganzi.soccerhub.user.domain.User;
 import jakarta.validation.constraints.*;
@@ -25,6 +26,7 @@ public class AddTravelMatePostCommand extends SelfValidating<AddTravelMatePostCo
     @NotNull
     private final LocalDateTime endDate;
 
+    @Size(min = TravelMatePost.PLACE_MIN_SIZE, max = TravelMatePost.PLACE_MAX_SIZE, message = "장소를 최소 1개, 최대 10개 까지 선택해야 합니다.")
     private final List<Long> places;
 
     @Min(value = 0, message = "값은 0 이상이어야 합니다.")

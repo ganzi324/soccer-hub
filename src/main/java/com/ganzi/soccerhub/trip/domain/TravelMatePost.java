@@ -17,6 +17,9 @@ import java.util.Optional;
 @EqualsAndHashCode
 public class TravelMatePost {
 
+    public static final int PLACE_MIN_SIZE = 1;
+    public static final int PLACE_MAX_SIZE = 10;
+
     @Getter(AccessLevel.NONE)
     @EqualsAndHashCode.Exclude
     private final PostId id;
