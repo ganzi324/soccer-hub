@@ -39,4 +39,19 @@ public class TravelMatePostTestData {
                 UserTestData.defaultUser()
         );
     }
+
+    public static TravelMatePost somePlaces() {
+        return TravelMatePost.withId(
+                TravelMatePost.PostId.of(2L),
+                "장소 3개를 포함한 포스팅입니다.",
+                LocalDateTime.now().plusDays(1),
+                LocalDateTime.now().plusDays(2),
+                List.of(PlaceTestData.sample1(), PlaceTestData.sample2(), PlaceTestData.sample3()),
+                10,
+                Gender.FEMALE,
+                AgeRange.THIRTIES,
+                "어디든 여행 가자. 지금 날씨 좋다.",
+                UserTestData.defaultUser()
+        );
+    }
 }
