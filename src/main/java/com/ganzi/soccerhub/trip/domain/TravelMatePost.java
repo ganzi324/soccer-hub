@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class TravelMatePost {
     @EqualsAndHashCode.Exclude
     private final LocalDateTime endDate;
 
+    @Getter(AccessLevel.NONE)
     private final List<Place> places;
 
     private final int capacity;
@@ -64,6 +66,23 @@ public class TravelMatePost {
 
     public Optional<PostId> getId() {
         return Optional.ofNullable(id);
+    }
+
+    public List<Place> getPlaces() {
+        return Collections.unmodifiableList(places);
+    }
+
+    public TravelMatePost update(TravelMatePostUpdateVo updateVo) {
+        String title = Optional.ofNullable(updateVo.title()).orElse(this.title);
+        LocalDateTime startDate = Optional.ofNullable(updateVo.startDate()).orElse(this.startDate);
+        LocalDateTime endDate = Optional.ofNullable(updateVo.endDate()).orElse(this.endDate);
+        List<Place> places = Optional.ofNullable(updateVo.places()).orElse(this.places);
+        int capacity = updateVo.capacity();
+        Gender gender = Optional.ofNullable(updateVo.gender()).orElse(this.gender);
+        AgeRange ageRange = Optional.ofNullable(updateVo.age()).orElse(this.age);
+        String description = Optional.ofNullable(updateVo.description()).orElse(this.description);
+
+        return new TravelMatePost(this.id, title, startDate, endDate, places, capacity, gender, ageRange, description, this.author, this.createdAt, LocalDateTime.now());
     }
 
     public record PostId(Long value) {
