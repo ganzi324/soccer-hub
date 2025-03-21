@@ -4,5 +4,5 @@ import com.ganzi.soccerhub.trip.domain.TravelMatePost;
 
 public interface AddTravelMatePostPort {
 
-    TravelMatePost addPort(TravelMatePost travelMatePost);
+    TravelMatePost addPost(TravelMatePost travelMatePost);
 }

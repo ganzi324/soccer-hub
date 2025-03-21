@@ -20,7 +20,7 @@ public class TravelMatePostPersistenceAdaptor implements AddTravelMatePostPort, 
     private final PlaceMapper placeMapper;
 
     @Override
-    public TravelMatePost addPort(TravelMatePost travelMatePost) {
+    public TravelMatePost addPost(TravelMatePost travelMatePost) {
         TravelMatePostJpaEntity travelMatePostJpaEntity = travelMatePostMapper.mapToJpaEntity(travelMatePost);
         travelMatePostRepository.save(travelMatePostJpaEntity);
 

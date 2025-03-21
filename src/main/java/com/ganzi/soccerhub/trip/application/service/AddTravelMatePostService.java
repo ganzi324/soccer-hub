@@ -41,7 +41,7 @@ public class AddTravelMatePostService implements AddTravelMatePostUseCase {
                 author
         );
 
-        return addTravelMatePostPort.addPort(travelMatePost);
+        return addTravelMatePostPort.addPost(travelMatePost);
     }
 
     private List<Place> getPlaceList(List<Long> placeIds) {

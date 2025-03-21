@@ -48,7 +48,7 @@ public class AddTravelMatePostServiceTest {
     }
 
     private void givenSavePostWillSucceed() {
-        given(addTravelMatePostPort.addPort(any(TravelMatePost.class)))
+        given(addTravelMatePostPort.addPost(any(TravelMatePost.class)))
                 .willReturn(TravelMatePostTestData.defaultPost());
     }
 
