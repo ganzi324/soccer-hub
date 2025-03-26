@@ -45,4 +45,11 @@ public class GlobalExceptionHandler {
         ApiResponseError<?> response = ApiResponseError.of(ErrorCode.DEFAULT, exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler({ RuntimeException.class })
+    ResponseEntity<ApiResponseError<?>> handleUndefinedException(Exception exception) {
+        ApiResponseError<?> response = ApiResponseError.of(ErrorCode.DEFAULT, exception.getMessage());
+        log.error(response.getDetails().toString());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

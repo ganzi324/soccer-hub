@@ -1,5 +1,7 @@
 package com.ganzi.soccerhub.user.controller;
 
+import com.ganzi.soccerhub.common.config.TestDataSourceConfig;
+import com.ganzi.soccerhub.common.infra.persistence.JpaConfig;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,9 +11,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+@Import(JpaConfig.class)
+@ContextConfiguration(classes = {TestDataSourceConfig.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
 class AddUserControllerTest {
@@ -41,7 +49,7 @@ class AddUserControllerTest {
                 .with()
                 .contentType(ContentType.JSON)
                 .body(jsonBody)
-                .post("/v1/auth/sign-in")
+                .post("/api/v1/auth/sign-in")
                 .then()
                 .log().all()
                 .assertThat().statusCode(200);

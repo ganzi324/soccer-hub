@@ -12,16 +12,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @WebAdaptor
 @RestController
+@RequestMapping("/v1/users")
 @RequiredArgsConstructor
 public class PatchUserController {
 
     private final PatchUserUseCase patchUserUseCase;
 
-    @PostMapping(path = "/users/{userId}")
+    @PostMapping("/{userId}")
     ResponseEntity<ApiResponse<UserResponse>> patchUser(
             @RequestBody PatchUserRequest requestDto,
             @HashId Long userId,
