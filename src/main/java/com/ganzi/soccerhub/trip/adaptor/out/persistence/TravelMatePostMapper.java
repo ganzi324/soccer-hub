@@ -24,7 +24,8 @@ public class TravelMatePostMapper {
                 travelMatePost.getGender(),
                 travelMatePost.getAge(),
                 travelMatePost.getDescription(),
-                userMapper.mapToDomainEntity(travelMatePost.getUser())
+                userMapper.mapToDomainEntity(travelMatePost.getUser()),
+                travelMatePost.getStatus()
         );
     }
 
@@ -39,7 +40,8 @@ public class TravelMatePostMapper {
                 travelMatePost.getGender(),
                 travelMatePost.getAge(),
                 travelMatePost.getDescription(),
-                userMapper.mapToJpaEntity(travelMatePost.getAuthor())
+                userMapper.mapToJpaEntity(travelMatePost.getAuthor()),
+                travelMatePost.getStatus()
         );
     }
 }

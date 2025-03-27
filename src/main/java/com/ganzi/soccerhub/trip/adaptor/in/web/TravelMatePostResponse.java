@@ -4,6 +4,7 @@ import com.ganzi.soccerhub.common.infra.hashid.HashId;
 import com.ganzi.soccerhub.place.domain.Place;
 import com.ganzi.soccerhub.trip.domain.AgeRange;
 import com.ganzi.soccerhub.trip.domain.TravelMatePost;
+import com.ganzi.soccerhub.trip.domain.TravelMatePostStatus;
 import com.ganzi.soccerhub.user.domain.Gender;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,8 @@ class TravelMatePostResponse {
 
     private String author;
 
+    private TravelMatePostStatus status;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -53,6 +56,7 @@ class TravelMatePostResponse {
                 travelMatePost.getAge(),
                 travelMatePost.getDescription(),
                 travelMatePost.getAuthor().getName(),
+                travelMatePost.getStatus(),
                 travelMatePost.getCreatedAt(),
                 travelMatePost.getUpdatedAt()
         );

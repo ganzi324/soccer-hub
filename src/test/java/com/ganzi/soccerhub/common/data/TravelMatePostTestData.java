@@ -3,6 +3,7 @@ package com.ganzi.soccerhub.common.data;
 import com.ganzi.soccerhub.common.UserTestData;
 import com.ganzi.soccerhub.trip.domain.AgeRange;
 import com.ganzi.soccerhub.trip.domain.TravelMatePost;
+import com.ganzi.soccerhub.trip.domain.TravelMatePostStatus;
 import com.ganzi.soccerhub.user.domain.Gender;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,8 @@ public class TravelMatePostTestData {
                 Gender.MALE,
                 AgeRange.TWENTIES,
                 "남산 여행갈 사람 모집합니다. 남자 2명 함께 여행갔으면 좋겠어요.",
-                UserTestData.defaultUser()
+                UserTestData.defaultUser(),
+                TravelMatePostStatus.OPEN
         );
     }
 
@@ -36,7 +38,8 @@ public class TravelMatePostTestData {
                 Gender.MALE,
                 AgeRange.TWENTIES,
                 "남산 여행갈 사람 모집합니다. 남자 2명 함께 여행갔으면 좋겠어요.",
-                UserTestData.defaultUser()
+                UserTestData.defaultUser(),
+                TravelMatePostStatus.OPEN
         );
     }
 
@@ -51,7 +54,8 @@ public class TravelMatePostTestData {
                 Gender.FEMALE,
                 AgeRange.THIRTIES,
                 "어디든 여행 가자. 지금 날씨 좋다.",
-                UserTestData.defaultUser()
+                UserTestData.defaultUser(),
+                TravelMatePostStatus.OPEN
         );
     }
 }

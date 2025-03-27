@@ -119,6 +119,9 @@ public class TravelMatePostPersistenceAdaptor implements AddTravelMatePostPort, 
         if (!criteria.getAge().equals(AgeRange.ANY)) {
             whereClause.and(travelMatePostJpaEntity.age.eq(criteria.getAge()));
         }
+        if (criteria.getStatus() != null) {
+            whereClause.and(travelMatePostJpaEntity.startDate.eq(criteria.getStartDate()));
+        }
 
         return whereClause;
     }

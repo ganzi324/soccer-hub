@@ -1,5 +1,6 @@
 package com.ganzi.soccerhub.trip.domain;
 
+import com.ganzi.soccerhub.common.exception.InvalidStatusTransitionException;
 import com.ganzi.soccerhub.place.domain.Place;
 import com.ganzi.soccerhub.user.domain.Gender;
 import com.ganzi.soccerhub.user.domain.User;
@@ -46,6 +47,8 @@ public class TravelMatePost {
 
     private final User author;
 
+    private TravelMatePostStatus status;
+
     @EqualsAndHashCode.Exclude
     private final LocalDateTime createdAt;
 
@@ -55,13 +58,13 @@ public class TravelMatePost {
     public static TravelMatePost withoutId(String title, LocalDateTime startDate, LocalDateTime endDate, List<Place> places,
                                            int capacity, Gender gender, AgeRange age, String description, User author) {
         LocalDateTime now = LocalDateTime.now();
-        return new TravelMatePost(null, title, startDate, endDate, List.copyOf(places), capacity, gender, age, description, author, now, now);
+        return new TravelMatePost(null, title, startDate, endDate, List.copyOf(places), capacity, gender, age, description, author, TravelMatePostStatus.OPEN, now, now);
     }
 
     public static TravelMatePost withId(PostId id, String title, LocalDateTime startDate, LocalDateTime endDate, List<Place> places,
-                                            int capacity, Gender gender, AgeRange age, String description, User author) {
+                                            int capacity, Gender gender, AgeRange age, String description, User author, TravelMatePostStatus status) {
         LocalDateTime now = LocalDateTime.now();
-        return new TravelMatePost(id, title, startDate, endDate, List.copyOf(places), capacity, gender, age, description, author, now, now);
+        return new TravelMatePost(id, title, startDate, endDate, List.copyOf(places), capacity, gender, age, description, author, status, now, now);
     }
 
     public Optional<PostId> getId() {
@@ -82,7 +85,23 @@ public class TravelMatePost {
         AgeRange ageRange = Optional.ofNullable(updateVo.age()).orElse(this.age);
         String description = Optional.ofNullable(updateVo.description()).orElse(this.description);
 
-        return new TravelMatePost(this.id, title, startDate, endDate, places, capacity, gender, ageRange, description, this.author, this.createdAt, LocalDateTime.now());
+        return new TravelMatePost(this.id, title, startDate, endDate, places, capacity, gender, ageRange, description, this.author, this.status, this.createdAt, LocalDateTime.now());
+    }
+
+    public TravelMatePost changeStatus(TravelMatePostStatus newStatus) {
+        if (!this.canChangeTo(newStatus)) {
+            throw new InvalidStatusTransitionException(this.status, newStatus);
+        }
+        return new TravelMatePost(this.id, this.title, this.getStartDate(), this.getEndDate(), this.getPlaces(), this.capacity, this.gender, this.age, this.description, this.author, newStatus, this.createdAt, this.updatedAt);
+    }
+
+    private boolean canChangeTo(TravelMatePostStatus newStatus) {
+        if (newStatus == TravelMatePostStatus.CLOSED) {
+            return !this.status.equals(TravelMatePostStatus.DRAFT);
+        } else if (newStatus == TravelMatePostStatus.PENDING) {
+            return this.status.equals(TravelMatePostStatus.OPEN);
+        }
+        return false;
     }
 
     public record PostId(Long value) {
