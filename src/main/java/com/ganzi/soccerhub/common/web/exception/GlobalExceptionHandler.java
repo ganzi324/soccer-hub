@@ -6,9 +6,11 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.text.MessageFormat;
 
@@ -34,9 +36,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, status);
     }
 
-    @ExceptionHandler({ ConstraintViolationException.class })
-    ResponseEntity<ApiResponseError<?>> handleConstraintViolationException(ConstraintViolationException exception) {
+    @ExceptionHandler({
+            ConstraintViolationException.class,
+            MethodArgumentTypeMismatchException.class,
+            HttpMessageNotReadableException.class
+    })
+    ResponseEntity<ApiResponseError<?>> handleBadRequestException(Exception exception) {
         ApiResponseError<?> response = ApiResponseError.of(ErrorCode.INVALID_REQUEST_PARAMETER, exception.getMessage());
+        log.error(response.getDetails().toString());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
