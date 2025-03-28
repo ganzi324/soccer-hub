@@ -96,12 +96,13 @@ public class TravelMatePost {
     }
 
     private boolean canChangeTo(TravelMatePostStatus newStatus) {
-        if (newStatus == TravelMatePostStatus.CLOSED) {
-            return !this.status.equals(TravelMatePostStatus.DRAFT);
-        } else if (newStatus == TravelMatePostStatus.PENDING) {
-            return this.status.equals(TravelMatePostStatus.OPEN);
-        }
-        return false;
+        return switch (newStatus) {
+            case CLOSED -> !this.status.equals(TravelMatePostStatus.DRAFT);
+            case PENDING -> this.status.equals(TravelMatePostStatus.OPEN);
+            case DRAFT -> false;
+            case OPEN -> true;
+            default -> false;
+        };
     }
 
     public record PostId(Long value) {
