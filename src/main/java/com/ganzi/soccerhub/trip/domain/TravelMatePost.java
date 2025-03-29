@@ -62,9 +62,8 @@ public class TravelMatePost {
     }
 
     public static TravelMatePost withId(PostId id, String title, LocalDateTime startDate, LocalDateTime endDate, List<Place> places,
-                                            int capacity, Gender gender, AgeRange age, String description, User author, TravelMatePostStatus status) {
-        LocalDateTime now = LocalDateTime.now();
-        return new TravelMatePost(id, title, startDate, endDate, List.copyOf(places), capacity, gender, age, description, author, status, now, now);
+                                            int capacity, Gender gender, AgeRange age, String description, User author, TravelMatePostStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        return new TravelMatePost(id, title, startDate, endDate, List.copyOf(places), capacity, gender, age, description, author, status, createdAt, updatedAt);
     }
 
     public Optional<PostId> getId() {

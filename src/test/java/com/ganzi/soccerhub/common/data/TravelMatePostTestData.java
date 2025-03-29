@@ -23,7 +23,9 @@ public class TravelMatePostTestData {
                 AgeRange.TWENTIES,
                 "남산 여행갈 사람 모집합니다. 남자 2명 함께 여행갔으면 좋겠어요.",
                 UserTestData.defaultUser(),
-                TravelMatePostStatus.OPEN
+                TravelMatePostStatus.OPEN,
+                LocalDateTime.now().minusDays(3L),
+                LocalDateTime.now().minusDays(3L)
         );
     }
 
@@ -39,7 +41,9 @@ public class TravelMatePostTestData {
                 AgeRange.TWENTIES,
                 "남산 여행갈 사람 모집합니다. 남자 2명 함께 여행갔으면 좋겠어요.",
                 UserTestData.defaultUser(),
-                TravelMatePostStatus.OPEN
+                TravelMatePostStatus.OPEN,
+                LocalDateTime.now().minusDays(3L),
+                LocalDateTime.now().minusDays(3L)
         );
     }
 
@@ -55,7 +59,9 @@ public class TravelMatePostTestData {
                 AgeRange.THIRTIES,
                 "어디든 여행 가자. 지금 날씨 좋다.",
                 UserTestData.defaultUser(),
-                TravelMatePostStatus.OPEN
+                TravelMatePostStatus.OPEN,
+                LocalDateTime.now().minusDays(3L),
+                LocalDateTime.now().minusDays(3L)
         );
     }
 }

@@ -25,7 +25,9 @@ public class TravelMatePostMapper {
                 travelMatePost.getAge(),
                 travelMatePost.getDescription(),
                 userMapper.mapToDomainEntity(travelMatePost.getUser()),
-                travelMatePost.getStatus()
+                travelMatePost.getStatus(),
+                travelMatePost.getCreatedAt(),
+                travelMatePost.getUpdatedAt()
         );
     }
 
