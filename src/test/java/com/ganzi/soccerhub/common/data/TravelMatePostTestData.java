@@ -64,4 +64,22 @@ public class TravelMatePostTestData {
                 LocalDateTime.now().minusDays(3L)
         );
     }
+
+    public static TravelMatePost closed() {
+        return TravelMatePost.withId(
+                TravelMatePost.PostId.of(3L),
+                "모집이 완료된 포스팅입니다.",
+                LocalDateTime.now().plusDays(1),
+                LocalDateTime.now().plusDays(2),
+                List.of(PlaceTestData.sample1(), PlaceTestData.sample2(), PlaceTestData.sample3()),
+                10,
+                Gender.FEMALE,
+                AgeRange.THIRTIES,
+                "어디든 여행 가자. 지금 날씨 좋다.",
+                UserTestData.defaultUser(),
+                TravelMatePostStatus.CLOSED,
+                LocalDateTime.now().minusDays(3L),
+                LocalDateTime.now().minusDays(3L)
+        );
+    }
 }
