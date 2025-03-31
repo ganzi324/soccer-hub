@@ -12,6 +12,10 @@ import com.ganzi.soccerhub.trip.domain.TravelMatePost;
 import com.ganzi.soccerhub.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +23,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -54,31 +59,37 @@ class GetTravelMateJoinRequestServiceTest {
     void getByPost_willSuccess() {
         TravelMateJoinRequest travelMateJoinRequest = TravelMateJoinRequestTestData.approved();
 
-        givenTravelMatePostLoaded(travelMateJoinRequest.getTravelMatePost());
-        givenTravelMateJoinRequestLoaded(travelMateJoinRequest);
+        Pageable pageable =  PageRequest.of(0, 10);
 
-        List<TravelMateJoinRequest> result = getTravelMateJoinRequestQuery.getByPost(
+        givenTravelMatePostLoaded(travelMateJoinRequest.getTravelMatePost());
+        givenTravelMateJoinRequestLoaded(travelMateJoinRequest, pageable);
+
+        Page<TravelMateJoinRequest> result = getTravelMateJoinRequestQuery.getByPost(
                 travelMateJoinRequest.getTravelMatePost().getId().get(),
                 travelMateJoinRequest.getStatus(),
-                travelMateJoinRequest.getRequester().getId().get()
+                travelMateJoinRequest.getRequester().getId().get(),
+                pageable
         );
 
         assertNotNull(result);
 
-        verify(loadTravelMateJoinRequestPort).loadByPost(any(), any());
+        verify(loadTravelMateJoinRequestPort).loadByPost(any(), any(), eq(pageable));
     }
 
     @Test
     void getByPost_shouldFailed_whenTravelMatePostNotFound() {
         TravelMateJoinRequest travelMateJoinRequest = TravelMateJoinRequestTestData.approved();
 
+        Pageable pageable =  PageRequest.of(0, 10);
+
         givenTravelMatePostLoaded(travelMateJoinRequest.getTravelMatePost());
-        givenTravelMateJoinRequestLoaded(travelMateJoinRequest);
+        givenTravelMateJoinRequestLoaded(travelMateJoinRequest, pageable);
 
         assertThatThrownBy(() -> getTravelMateJoinRequestQuery.getByPost(
                 TravelMatePost.PostId.of(10L),
                 travelMateJoinRequest.getStatus(),
-                travelMateJoinRequest.getRequester().getId().get()
+                travelMateJoinRequest.getRequester().getId().get(),
+                pageable
         )).isExactlyInstanceOf(DomainIdNotFoundException.class);
     }
 
@@ -86,13 +97,16 @@ class GetTravelMateJoinRequestServiceTest {
     void getByPost_shouldFailed_whenUserIsNotPostAuthor() {
         TravelMateJoinRequest travelMateJoinRequest = TravelMateJoinRequestTestData.approved();
 
+        Pageable pageable =  PageRequest.of(0, 10);
+
         givenTravelMatePostLoaded(travelMateJoinRequest.getTravelMatePost());
-        givenTravelMateJoinRequestLoaded(travelMateJoinRequest);
+        givenTravelMateJoinRequestLoaded(travelMateJoinRequest, pageable);
 
         assertThatThrownBy(() -> getTravelMateJoinRequestQuery.getByPost(
                 travelMateJoinRequest.getTravelMatePost().getId().get(),
                 travelMateJoinRequest.getStatus(),
-                User.UserId.of(10L)
+                User.UserId.of(10L),
+                pageable
         )).isExactlyInstanceOf(UnauthorizedException.class);
     }
 
@@ -106,8 +120,8 @@ class GetTravelMateJoinRequestServiceTest {
                 .willReturn(Optional.of(travelMatePost));
     }
 
-    private void givenTravelMateJoinRequestLoaded(TravelMateJoinRequest travelMateJoinRequest) {
-        given(loadTravelMateJoinRequestPort.loadByPost(any(TravelMatePost.PostId.class), any(RequestStatus.class)))
-                .willReturn(List.of(travelMateJoinRequest));
+    private void givenTravelMateJoinRequestLoaded(TravelMateJoinRequest travelMateJoinRequest, Pageable pageable) {
+        given(loadTravelMateJoinRequestPort.loadByPost(any(TravelMatePost.PostId.class), any(RequestStatus.class), eq(pageable)))
+                .willReturn(PageableExecutionUtils.getPage(List.of(travelMateJoinRequest), pageable, () -> 1L));
     }
 }

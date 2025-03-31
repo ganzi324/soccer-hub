@@ -7,6 +7,9 @@ import com.ganzi.soccerhub.trip.domain.RequestStatus;
 import com.ganzi.soccerhub.trip.domain.TravelMateJoinRequest;
 import com.ganzi.soccerhub.trip.domain.TravelMatePost;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -36,10 +39,10 @@ public class TravelMateJoinRequestPersistenceAdaptor implements
 
     @Override
     @Transactional(readOnly = true)
-    public List<TravelMateJoinRequest> loadByPost(TravelMatePost.PostId postId, RequestStatus status) {
-        return travelMateJoinRequestRepository.findByTravelMatePostIdAndStatus(postId.value(), status)
-                .stream()
-                .map(travelMateJoinRequestMapper::mapToDomainEntity)
-                .toList();
+    public Page<TravelMateJoinRequest> loadByPost(TravelMatePost.PostId postId, RequestStatus status, Pageable pageable) {
+        Page<TravelMateJoinRequestJpaEntity> result = travelMateJoinRequestRepository.findByTravelMatePostIdAndStatus(postId.value(), status, pageable);
+        List<TravelMateJoinRequest> mappedResult = result.stream().map(travelMateJoinRequestMapper::mapToDomainEntity).toList();
+
+        return PageableExecutionUtils.getPage(mappedResult, pageable, result::getTotalElements);
     }
 }

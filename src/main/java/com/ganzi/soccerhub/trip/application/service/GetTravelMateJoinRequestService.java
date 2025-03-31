@@ -11,8 +11,8 @@ import com.ganzi.soccerhub.trip.domain.TravelMateJoinRequest;
 import com.ganzi.soccerhub.trip.domain.TravelMatePost;
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @UseCase
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class GetTravelMateJoinRequestService implements GetTravelMateJoinRequest
     }
 
     @Override
-    public List<TravelMateJoinRequest> getByPost(TravelMatePost.PostId postId, RequestStatus status, User.UserId userId) {
+    public Page<TravelMateJoinRequest> getByPost(TravelMatePost.PostId postId, RequestStatus status, User.UserId userId, Pageable pageable) {
         TravelMatePost travelMatePost = loadTravelMatePostPort.loadById(postId)
                 .orElseThrow(() -> new DomainIdNotFoundException(TravelMatePost.class));
 
@@ -36,6 +36,6 @@ public class GetTravelMateJoinRequestService implements GetTravelMateJoinRequest
             throw new UnauthorizedException();
         }
 
-        return loadTravelMateJoinRequestPort.loadByPost(travelMatePost.getId().get(), status);
+        return loadTravelMateJoinRequestPort.loadByPost(travelMatePost.getId().get(), status, pageable);
     }
 }
