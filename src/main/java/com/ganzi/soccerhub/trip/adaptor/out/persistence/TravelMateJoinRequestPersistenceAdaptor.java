@@ -3,10 +3,13 @@ package com.ganzi.soccerhub.trip.adaptor.out.persistence;
 import com.ganzi.soccerhub.common.PersistenceAdapter;
 import com.ganzi.soccerhub.trip.application.port.out.AddTravelMateJoinRequestPort;
 import com.ganzi.soccerhub.trip.application.port.out.LoadTravelMateJoinRequestPort;
+import com.ganzi.soccerhub.trip.domain.RequestStatus;
 import com.ganzi.soccerhub.trip.domain.TravelMateJoinRequest;
+import com.ganzi.soccerhub.trip.domain.TravelMatePost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @PersistenceAdapter
@@ -29,5 +32,14 @@ public class TravelMateJoinRequestPersistenceAdaptor implements
     @Transactional(readOnly = true)
     public Optional<TravelMateJoinRequest> loadById(TravelMateJoinRequest.Id id) {
         return travelMateJoinRequestRepository.findById(id.value()).map(travelMateJoinRequestMapper::mapToDomainEntity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TravelMateJoinRequest> loadByPost(TravelMatePost.PostId postId, RequestStatus status) {
+        return travelMateJoinRequestRepository.findByTravelMatePostIdAndStatus(postId.value(), status)
+                .stream()
+                .map(travelMateJoinRequestMapper::mapToDomainEntity)
+                .toList();
     }
 }
