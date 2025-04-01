@@ -2,6 +2,7 @@ package com.ganzi.soccerhub.trip.application.command;
 
 import com.ganzi.soccerhub.common.SelfValidating;
 import com.ganzi.soccerhub.trip.domain.AgeRange;
+import com.ganzi.soccerhub.trip.domain.TravelMatePostStatus;
 import com.ganzi.soccerhub.user.domain.Gender;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
@@ -30,7 +31,9 @@ public class TravelMatePostSearchCriteria extends SelfValidating<TravelMatePostS
 
     private final AgeRange age;
 
-    public TravelMatePostSearchCriteria(String title, LocalDateTime startDate, LocalDateTime endDate, List<Long> places, int capacity, Gender gender, AgeRange age) {
+    private final TravelMatePostStatus status;
+
+    public TravelMatePostSearchCriteria(String title, LocalDateTime startDate, LocalDateTime endDate, List<Long> places, int capacity, Gender gender, AgeRange age, TravelMatePostStatus status) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -38,6 +41,7 @@ public class TravelMatePostSearchCriteria extends SelfValidating<TravelMatePostS
         this.capacity = capacity;
         this.gender = gender;
         this.age = age;
+        this.status = status;
 
         this.validateSelf();
     }

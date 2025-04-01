@@ -46,7 +46,8 @@ public class GetTravelMatePostController {
                 request.places(),
                 request.capacity(),
                 request.gender(),
-                request.age()
+                request.age(),
+                request.status()
         );
 
         Page<TravelMatePost> results = getTravelMatePostQuery.search(criteria, pageable);

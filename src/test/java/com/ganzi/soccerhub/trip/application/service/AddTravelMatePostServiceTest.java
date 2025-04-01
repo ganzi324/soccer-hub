@@ -2,6 +2,7 @@ package com.ganzi.soccerhub.trip.application.service;
 
 import com.ganzi.soccerhub.common.data.TravelMatePostTestData;
 import com.ganzi.soccerhub.place.application.port.in.GetPlaceQuery;
+import com.ganzi.soccerhub.place.domain.Place;
 import com.ganzi.soccerhub.trip.application.command.AddTravelMatePostCommand;
 import com.ganzi.soccerhub.trip.application.port.in.AddTravelMatePostUseCase;
 import com.ganzi.soccerhub.trip.application.port.out.AddTravelMatePostPort;
@@ -11,6 +12,7 @@ import com.ganzi.soccerhub.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,6 +33,7 @@ public class AddTravelMatePostServiceTest {
 
         givenSavePostWillSucceed();
         givenGetUserWillSucceed(travelMatePost.getAuthor());
+        givenGetPlaceWillSucceed(travelMatePost.getPlaces());
 
         AddTravelMatePostCommand command = new AddTravelMatePostCommand(
                 travelMatePost.getTitle(),
@@ -55,5 +58,10 @@ public class AddTravelMatePostServiceTest {
     private void givenGetUserWillSucceed(User user) {
         given(getUserQuery.getUserById(any(User.UserId.class)))
                 .willReturn(Optional.ofNullable(user));
+    }
+
+    private void givenGetPlaceWillSucceed(List<Place> places) {
+        given(getPlaceQuery.getAllByIds(any()))
+                .willReturn(places);
     }
 }

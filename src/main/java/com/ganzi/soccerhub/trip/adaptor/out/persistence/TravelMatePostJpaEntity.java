@@ -3,6 +3,7 @@ package com.ganzi.soccerhub.trip.adaptor.out.persistence;
 import com.ganzi.soccerhub.common.infra.persistence.BaseTimeEntity;
 import com.ganzi.soccerhub.place.adaptor.out.persistence.PlaceJpaEntity;
 import com.ganzi.soccerhub.trip.domain.AgeRange;
+import com.ganzi.soccerhub.trip.domain.TravelMatePostStatus;
 import com.ganzi.soccerhub.user.adaptor.out.persistence.UserJpaEntity;
 import com.ganzi.soccerhub.user.domain.Gender;
 import jakarta.persistence.*;
@@ -57,6 +58,10 @@ public class TravelMatePostJpaEntity extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserJpaEntity user;
+
+    @Column(nullable = false)
+    @Convert(converter = TravelMatePostStatusConvertor.class)
+    private TravelMatePostStatus status;
 
     public List<PlaceJpaEntity> getPlaces() {
         return Collections.unmodifiableList(places);

@@ -26,4 +26,8 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> ok(T data) {
         return ApiResponse.of(HttpStatus.OK, HttpStatus.OK.name(), data);
     }
+
+    public static <T> ApiResponse<T> ok() {
+        return ApiResponse.of(HttpStatus.OK, HttpStatus.OK.name(), null);
+    }
 }

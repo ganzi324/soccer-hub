@@ -9,6 +9,7 @@ import com.ganzi.soccerhub.trip.application.port.out.LoadTravelMatePostPort;
 import com.ganzi.soccerhub.trip.application.port.out.PatchTravelMatePostPort;
 import com.ganzi.soccerhub.trip.domain.AgeRange;
 import com.ganzi.soccerhub.trip.domain.TravelMatePost;
+import com.ganzi.soccerhub.trip.domain.TravelMatePostStatus;
 import com.ganzi.soccerhub.user.domain.Gender;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -95,6 +96,12 @@ public class TravelMatePostPersistenceAdaptor implements AddTravelMatePostPort, 
         return travelMatePostMapper.mapToDomainEntity(travelMatePostJpaEntity);
     }
 
+    @Override
+    @Transactional
+    public int updateStatus(TravelMatePost.PostId postId, TravelMatePostStatus newStatus) {
+        return travelMatePostRepository.updateStatus(postId.value(), newStatus);
+    }
+
     private BooleanBuilder buildWhereClause(TravelMatePostSearchCriteria criteria) {
         BooleanBuilder whereClause = new BooleanBuilder();
 
@@ -118,6 +125,9 @@ public class TravelMatePostPersistenceAdaptor implements AddTravelMatePostPort, 
         }
         if (!criteria.getAge().equals(AgeRange.ANY)) {
             whereClause.and(travelMatePostJpaEntity.age.eq(criteria.getAge()));
+        }
+        if (criteria.getStatus() != null) {
+            whereClause.and(travelMatePostJpaEntity.startDate.eq(criteria.getStartDate()));
         }
 
         return whereClause;
