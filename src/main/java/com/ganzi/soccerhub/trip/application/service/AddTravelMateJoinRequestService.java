@@ -2,6 +2,7 @@ package com.ganzi.soccerhub.trip.application.service;
 
 import com.ganzi.soccerhub.common.UseCase;
 import com.ganzi.soccerhub.trip.application.command.AddTravelMateJoinRequestCommand;
+import com.ganzi.soccerhub.trip.application.event.TravelMateJoinRequestCreatedEvent;
 import com.ganzi.soccerhub.trip.application.exception.PostParticipationNotAllowedException;
 import com.ganzi.soccerhub.trip.application.exception.TravelMatePostNotFoundException;
 import com.ganzi.soccerhub.trip.application.port.in.AddTravelMateJoinRequestUseCase;
@@ -14,6 +15,7 @@ import com.ganzi.soccerhub.user.application.exception.UserNotFoundException;
 import com.ganzi.soccerhub.user.application.port.out.LoadUserPort;
 import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 
 @UseCase
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class AddTravelMateJoinRequestService implements AddTravelMateJoinRequest
     private final LoadTravelMatePostPort loadTravelMatePostPort;
     private final AddTravelMateJoinRequestPort addTravelMateJoinRequestPort;
     private final LoadUserPort loadUserPort;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * @apiNote 추후 Post 조건에 부합하는 사용자만 승인 가능 여부
@@ -36,6 +39,16 @@ public class AddTravelMateJoinRequestService implements AddTravelMateJoinRequest
 
         User requester = loadUserPort.loadUserById(command.getRequesterId()).orElseThrow(UserNotFoundException::new);
 
-        return addTravelMateJoinRequestPort.add(TravelMateJoinRequest.withoutId(travelMatePost, requester, command.getMessage()));
+        TravelMateJoinRequest travelMateJoinRequest = addTravelMateJoinRequestPort.add(TravelMateJoinRequest.withoutId(travelMatePost, requester, command.getMessage()));
+
+        sendNotification(travelMateJoinRequest);
+
+        return travelMateJoinRequest;
+    }
+
+    private void sendNotification(TravelMateJoinRequest travelMateJoinRequest) {
+        eventPublisher.publishEvent(
+                new TravelMateJoinRequestCreatedEvent(travelMateJoinRequest)
+        );
     }
 }
