@@ -9,6 +9,11 @@ public class EmailNotification implements Notification {
     private final EmailContent content;
 
     @Override
+    public NotificationType getType() {
+        return NotificationType.EMAIL;
+    }
+
+    @Override
     public Content getContent() {
         return content;
     }

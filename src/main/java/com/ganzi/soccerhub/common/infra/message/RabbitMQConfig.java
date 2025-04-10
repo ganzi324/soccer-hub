@@ -14,34 +14,14 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class RabbitMQConfig {
 
+    public static final String NOTIFICATION_EXCHANGE = "notification.exchange";
+    public static final String ROUTING_KEY_MAIN = "notification.main";
+
     private final RabbitMQProperties properties;
 
     @Bean
     public DirectExchange exchange() {
-        return new DirectExchange("notification-exchange");
-    }
-
-    @Bean
-    public Queue notificationQueue() {
-        return QueueBuilder.durable("notification-queue")
-                .withArgument("x-dead-letter-exchange", "notification-exchange")
-                .withArgument("x-dead-letter-routing-key", "notification.dlq")
-                .build();
-    }
-
-    @Bean
-    public Queue notificationDLQ() {
-        return QueueBuilder.durable("notification-dlq").build();
-    }
-
-    @Bean
-    public Binding notificationQueueBinding(DirectExchange exchange, Queue notificationQueue) {
-        return BindingBuilder.bind(notificationQueue).to(exchange).with("notification.send");
-    }
-
-    @Bean
-    public Binding notificationDLQBinding(DirectExchange exchange, Queue notificationDLQ) {
-        return BindingBuilder.bind(notificationDLQ).to(exchange).with("notification.dlq");
+        return new DirectExchange(NOTIFICATION_EXCHANGE);
     }
 
     @Bean
