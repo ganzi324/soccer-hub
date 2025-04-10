@@ -49,8 +49,8 @@ public class TravelMateJoinRequestNotificationGenerator {
                         .map(Place::getName)
                         .collect(Collectors.joining(", ")),
                 "numberOfPeople", travelMateJoinRequest.getTravelMatePost().getCapacity(),
-                "gender", travelMateJoinRequest.getTravelMatePost().getGender(),
-                "ageGroup", travelMateJoinRequest.getTravelMatePost().getAge(),
+                "gender", travelMateJoinRequest.getTravelMatePost().getGender().getDescription(),
+                "ageGroup", travelMateJoinRequest.getTravelMatePost().getAge().getDescription(),
                 "postUrl", ""
         ).forEach(context::setVariable);
 
