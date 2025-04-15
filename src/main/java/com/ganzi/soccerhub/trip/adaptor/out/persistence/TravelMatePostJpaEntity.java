@@ -34,7 +34,7 @@ public class TravelMatePostJpaEntity extends BaseTimeEntity {
 
     private LocalDateTime endDate;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
             name = "travel_mate_post_place",
             joinColumns = @JoinColumn(name = "travel_mate_post_id"),
