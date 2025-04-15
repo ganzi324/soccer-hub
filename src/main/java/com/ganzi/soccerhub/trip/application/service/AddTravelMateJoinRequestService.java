@@ -7,6 +7,7 @@ import com.ganzi.soccerhub.trip.application.exception.PostParticipationNotAllowe
 import com.ganzi.soccerhub.trip.application.exception.TravelMatePostNotFoundException;
 import com.ganzi.soccerhub.trip.application.port.in.AddTravelMateJoinRequestUseCase;
 import com.ganzi.soccerhub.trip.application.port.out.AddTravelMateJoinRequestPort;
+import com.ganzi.soccerhub.trip.application.port.out.LoadTravelMateJoinRequestPort;
 import com.ganzi.soccerhub.trip.application.port.out.LoadTravelMatePostPort;
 import com.ganzi.soccerhub.trip.domain.TravelMateJoinRequest;
 import com.ganzi.soccerhub.trip.domain.TravelMatePost;
@@ -22,6 +23,7 @@ import org.springframework.context.ApplicationEventPublisher;
 public class AddTravelMateJoinRequestService implements AddTravelMateJoinRequestUseCase {
 
     private final LoadTravelMatePostPort loadTravelMatePostPort;
+    private final LoadTravelMateJoinRequestPort loadTravelMateJoinRequestPort;
     private final AddTravelMateJoinRequestPort addTravelMateJoinRequestPort;
     private final LoadUserPort loadUserPort;
     private final ApplicationEventPublisher eventPublisher;
@@ -38,6 +40,11 @@ public class AddTravelMateJoinRequestService implements AddTravelMateJoinRequest
         }
 
         User requester = loadUserPort.loadUserById(command.getRequesterId()).orElseThrow(UserNotFoundException::new);
+
+        loadTravelMateJoinRequestPort.loadByPostIdAndRequesterId(command.getTravelMatePostId(), command.getRequesterId())
+                .ifPresent(request -> {
+                    throw new PostParticipationNotAllowedException("The user has already been requested to participate in a posting");
+                });
 
         TravelMateJoinRequest travelMateJoinRequest = addTravelMateJoinRequestPort.add(TravelMateJoinRequest.withoutId(travelMatePost, requester, command.getMessage()));
 
