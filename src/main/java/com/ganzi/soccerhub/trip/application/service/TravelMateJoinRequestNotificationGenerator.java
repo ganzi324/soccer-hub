@@ -1,8 +1,7 @@
 package com.ganzi.soccerhub.trip.application.service;
 
-import com.ganzi.soccerhub.notification.application.exception.UnsupportedNotificationTypeException;
 import com.ganzi.soccerhub.notification.application.service.factory.EmailNotificationData;
-import com.ganzi.soccerhub.notification.application.service.factory.NotificationFactory;
+import com.ganzi.soccerhub.notification.application.service.factory.NotificationFactoryRegistry;
 import com.ganzi.soccerhub.notification.domain.Notification;
 import com.ganzi.soccerhub.notification.domain.NotificationType;
 import com.ganzi.soccerhub.place.domain.Place;
@@ -26,15 +25,11 @@ public class TravelMateJoinRequestNotificationGenerator {
     private static final String EMAIL_TITLE = "여행 동행 요청 알림";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy년M월d일");
 
-    private final List<NotificationFactory> notificationFactories;
+    private final NotificationFactoryRegistry factoryRegistry;
     private final TemplateEngine templateEngine;
 
     Notification generate(TravelMateJoinRequest travelMateJoinRequest, NotificationType type) {
-        return notificationFactories.stream()
-                .filter(factory -> factory.supports(type))
-                .findFirst()
-                .map(factory -> factory.createNotification(createNotificationData(travelMateJoinRequest)))
-                .orElseThrow(() -> new UnsupportedNotificationTypeException("Unsupported notification type: " + type));
+        return factoryRegistry.create(createNotificationData(travelMateJoinRequest), type);
     }
 
     private EmailNotificationData createNotificationData(TravelMateJoinRequest travelMateJoinRequest) {
