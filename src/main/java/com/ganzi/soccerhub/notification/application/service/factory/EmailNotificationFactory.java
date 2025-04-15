@@ -4,6 +4,8 @@ import com.ganzi.soccerhub.notification.application.exception.InvalidNotificatio
 import com.ganzi.soccerhub.notification.domain.*;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class EmailNotificationFactory implements NotificationFactory {
 
@@ -13,7 +15,7 @@ public class EmailNotificationFactory implements NotificationFactory {
     }
 
     @Override
-    public Notification createNotification(Object contextData) {
+    public Notification createNotification(UUID id, Object contextData) {
         if (!(contextData instanceof EmailNotificationData emailNotificationData)) {
             throw new InvalidNotificationContextException(
                     "Invalid notification context: Expected EmailNotificationData but received "
@@ -23,6 +25,6 @@ public class EmailNotificationFactory implements NotificationFactory {
         EmailReceiver receiver = new EmailReceiver(emailNotificationData.to(), emailNotificationData.cc(), emailNotificationData.bcc());
         EmailContent emailContent = new EmailContent(emailNotificationData.subject(), emailNotificationData.body());
 
-        return new EmailNotification(receiver, emailContent);
+        return new EmailNotification(id, receiver, emailContent);
     }
 }
