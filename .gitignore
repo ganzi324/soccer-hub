@@ -7,3 +7,6 @@
 
 /logs/
 /.jetclient/
+
+application.yml
+application-*.yml
