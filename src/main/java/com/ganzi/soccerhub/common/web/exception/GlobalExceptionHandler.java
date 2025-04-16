@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({ CustomException.class })
     ResponseEntity<ApiResponseError<?>> handleException(CustomException exception) {
+        log.error(exception.getDetails(), exception);
         ApiResponseError<?> response = ApiResponseError.of(exception);
         HttpStatus status = exception.getStatus();
 
