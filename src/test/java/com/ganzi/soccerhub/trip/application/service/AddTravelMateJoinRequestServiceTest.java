@@ -6,6 +6,7 @@ import com.ganzi.soccerhub.trip.application.command.AddTravelMateJoinRequestComm
 import com.ganzi.soccerhub.trip.application.exception.PostParticipationNotAllowedException;
 import com.ganzi.soccerhub.trip.application.port.in.AddTravelMateJoinRequestUseCase;
 import com.ganzi.soccerhub.trip.application.port.out.AddTravelMateJoinRequestPort;
+import com.ganzi.soccerhub.trip.application.port.out.LoadTravelMateJoinRequestPort;
 import com.ganzi.soccerhub.trip.application.port.out.LoadTravelMatePostPort;
 import com.ganzi.soccerhub.trip.domain.TravelMateJoinRequest;
 import com.ganzi.soccerhub.trip.domain.TravelMatePost;
@@ -13,6 +14,7 @@ import com.ganzi.soccerhub.user.application.port.out.LoadUserPort;
 import com.ganzi.soccerhub.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
@@ -25,10 +27,18 @@ import static org.mockito.Mockito.verify;
 public class AddTravelMateJoinRequestServiceTest {
 
     private final LoadTravelMatePostPort loadTravelMatePostPort = Mockito.mock(LoadTravelMatePostPort.class);
+    private final LoadTravelMateJoinRequestPort loadTravelMateJoinRequestPort = Mockito.mock(LoadTravelMateJoinRequestPort.class);
     private final AddTravelMateJoinRequestPort addTravelMateJoinRequestPort = Mockito.mock(AddTravelMateJoinRequestPort.class);
     private final LoadUserPort loadUserPort = Mockito.mock(LoadUserPort.class);
+    private final ApplicationEventPublisher applicationEventPublisher = Mockito.mock(ApplicationEventPublisher.class);
 
-    private final AddTravelMateJoinRequestUseCase addTravelMateJoinRequestUseCase = new AddTravelMateJoinRequestService(loadTravelMatePostPort, addTravelMateJoinRequestPort, loadUserPort);
+    private final AddTravelMateJoinRequestUseCase addTravelMateJoinRequestUseCase = new AddTravelMateJoinRequestService(
+            loadTravelMatePostPort,
+            loadTravelMateJoinRequestPort,
+            addTravelMateJoinRequestPort,
+            loadUserPort,
+            applicationEventPublisher
+    );
 
     @Test
     void add_shouldSucceed() {
