@@ -20,8 +20,8 @@ public class ApiResponseError<T> {
         this.timestamp = LocalDateTime.now();
     }
 
-    public static <T> ApiResponseError<T> of(CustomException exception) {
-        return new ApiResponseError<>(exception.getCode(), exception.getMessage(), null);
+    public static ApiResponseError<?> of(CustomException exception) {
+        return new ApiResponseError<>(exception.getCode(), exception.getMessage(), exception.getDetails());
     }
 
     public static <T> ApiResponseError<T> of(ErrorCode errorCode, T details) {

@@ -4,3 +4,9 @@
 /build/classes/java/main/
 
 /.idea/
+
+/logs/
+/.jetclient/
+
+application.yml
+application-*.yml

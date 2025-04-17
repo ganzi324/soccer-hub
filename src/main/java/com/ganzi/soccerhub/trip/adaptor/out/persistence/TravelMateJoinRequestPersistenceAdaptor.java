@@ -6,6 +6,7 @@ import com.ganzi.soccerhub.trip.application.port.out.LoadTravelMateJoinRequestPo
 import com.ganzi.soccerhub.trip.domain.RequestStatus;
 import com.ganzi.soccerhub.trip.domain.TravelMateJoinRequest;
 import com.ganzi.soccerhub.trip.domain.TravelMatePost;
+import com.ganzi.soccerhub.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,5 +45,10 @@ public class TravelMateJoinRequestPersistenceAdaptor implements
         List<TravelMateJoinRequest> mappedResult = result.stream().map(travelMateJoinRequestMapper::mapToDomainEntity).toList();
 
         return PageableExecutionUtils.getPage(mappedResult, pageable, result::getTotalElements);
+    }
+
+    @Override
+    public Optional<TravelMateJoinRequest> loadByPostIdAndRequesterId(TravelMatePost.PostId postId, User.UserId requestId) {
+        return travelMateJoinRequestRepository.findByTravelMatePostIdAndRequesterId(postId.value(), requestId.value()).map(travelMateJoinRequestMapper::mapToDomainEntity);
     }
 }

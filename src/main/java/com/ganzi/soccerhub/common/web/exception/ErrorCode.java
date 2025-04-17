@@ -20,9 +20,8 @@ public enum ErrorCode {
     PLACE_NOT_FOUND(HttpStatus.BAD_REQUEST, "장소를 찾을 수 없습니다."),
     TRAVEL_MATE_POST_NOT_FOUND(HttpStatus.BAD_REQUEST, "게시물을 찾을 수 없습니다."),
     DOMAIN_MODIFICATION_DENIED(HttpStatus.UNAUTHORIZED, "수정할 수 없습니다."),
-    INVALID_STATUS_TRANSITION(HttpStatus.BAD_REQUEST, "상태를 변경할 수 없습니다.");
-
-
+    INVALID_STATUS_TRANSITION(HttpStatus.BAD_REQUEST, "상태를 변경할 수 없습니다."),
+    TRAVEL_MATE_JOIN_FAILED(HttpStatus.NOT_ACCEPTABLE, "포스팅에 참여할 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
