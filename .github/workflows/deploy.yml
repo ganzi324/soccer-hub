@@ -3,7 +3,7 @@ name: CI/CD - Build and Push Docker image
 on:
   push:
     branches:
-      - chore*
+      - chore/deploy-test
 
 jobs:
   build-and-deploy:
