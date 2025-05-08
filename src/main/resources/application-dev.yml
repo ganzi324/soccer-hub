@@ -1,0 +1,45 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    format-sql: true
+
+  datasource:
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ${DATASOURCE_MASTER_URL}
+      username: ${DATASOURCE_MASTER_USERNAME}
+      password: ${DATASOURCE_MASTER_PASSWORD}
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ${DATASOURCE_SLAVE_URL}
+      username: ${DATASOURCE_SLAVE_USERNAME}
+      password: ${DATASOURCE_SLAVE_PASSWORD}
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+  session:
+    store-type: jdbc
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+jwt:
+  secret_key: ${JWT_SECRET_KEY}
+  access_expired_time: ${JWT_ACCESS_EXPIRED_TIME}
+  refresh_expired_time: ${JWT_REFRESH_EXPIRED_TIME}
+
+hashids:
+  salt: ${HASHIDS_SALT}
