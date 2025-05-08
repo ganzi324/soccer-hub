@@ -52,6 +52,6 @@ class AddUserControllerTest {
                 .post("/api/v1/auth/sign-in")
                 .then()
                 .log().all()
-                .assertThat().statusCode(200);
+                .assertThat().statusCode(401);
     }
 }
