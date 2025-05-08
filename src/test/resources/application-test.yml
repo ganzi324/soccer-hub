@@ -21,6 +21,12 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+  rabbitmq:
+    host: dummy-host
+    port: 5672
+    username: test-user
+    password: test-pass
+
 jwt:
   secret_key: 685891EAE6DA6C33CC5CAEAE6A6A2D3SDDFC3DFEBABCDA3F9
   access_expired_time: 30
