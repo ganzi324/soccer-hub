@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>새로운 참여 요청</title>
+</head>
+<body>
+<h2>[TravelMate] 새로운 참여 요청이 도착했습니다!</h2>
+<p><strong>📌 포스팅 제목:</strong> <span th:text="${postTitle}"></span></p>
+<p><strong>👤 요청자:</strong> <span th:text="${requesterName}"></span></p>
+<p><strong>📅 요청 시간:</strong> <span th:text="${requestTime}"></span></p>
+<p><strong>✈️ 여행 정보:</strong></p>
+<ul>
+    <li><strong>기간:</strong> <span th:text="${travelPeriod}"></span></li>
+    <li><strong>장소:</strong> <span th:text="${travelLocation}"></span></li>
+    <li><strong>인원:</strong> <span th:text="${numberOfPeople}"></span>명</li>
+    <li><strong>성별 제한:</strong> <span th:text="${gender}"></span></li>
+    <li><strong>연령대:</strong> <span th:text="${ageGroup}"></span></li>
+</ul>
+<p>자세한 내용을 확인하려면 <a th:href="${postUrl}">여기</a>를 클릭하세요.</p>
+</body>
+</html>

@@ -1,0 +1,45 @@
+spring:
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;
+
+  h2:
+    console:
+      enabled: true
+
+  session:
+    store-type: jdbc
+
+  main:
+    allow-bean-definition-overriding: true
+
+  rabbitmq:
+    host: dummy-host
+    port: 5672
+    username: test-user
+    password: test-pass
+
+jwt:
+  secret_key: 685891EAE6DA6C33CC5CAEAE6A6A2D3SDDFC3DFEBABCDA3F9
+  access_expired_time: 30
+  refresh_expired_time: 60
+
+hashids:
+  salt: y32yn9af5iav50ul
+
+logging:
+  level:
+    root: INFO
+  appenders:
+    console:
+      enabled: true
+    file:
+      enabled: false

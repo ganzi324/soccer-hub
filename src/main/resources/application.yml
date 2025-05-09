@@ -1,0 +1,54 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      force-response: true
+    context-path: /api
+
+spring:
+  application:
+    name: soccer-hub
+  profiles:
+    include: oauth
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    show_sql: true
+
+  datasource:
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/soccerhub?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      username: root
+      password: Qwer1234!
+    slave:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3307/soccerhub?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      username: root
+      password: Qwer1234!
+
+  session:
+    store-type: jdbc
+
+jwt:
+  secret_key: 683996FAE6DA6C33CC5CAEAE6A6A2D3SDDFC3DFEBABCDA3F9
+  access_expired_time: 3600
+  refresh_expired_time: 604800
+
+hashids:
+  salt: y32yn9af5iav50ul
+
+logging:
+  config: classpath:log4j2.yml
+#  file:
+#    name: ${user.dir}/log/test.log
+#    max-history: 7
+#    max-size: 1MB
+#  level:
+#    com.project.study : error
+#    com.project.study.controller : debug
