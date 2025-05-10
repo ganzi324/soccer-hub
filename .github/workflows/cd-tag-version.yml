@@ -27,4 +27,4 @@ jobs:
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/travelmate-api:${{ env.VERSION }} .
 
       - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/travelmate-api:${{ env.VERSION }} .
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/travelmate-api:${{ env.VERSION }}
