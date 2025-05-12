@@ -49,7 +49,7 @@ class AddUserControllerTest {
                 .with()
                 .contentType(ContentType.JSON)
                 .body(jsonBody)
-                .post("/api/v1/auth/sign-in")
+                .post("/v1/auth/sign-in")
                 .then()
                 .log().all()
                 .assertThat().statusCode(200);
