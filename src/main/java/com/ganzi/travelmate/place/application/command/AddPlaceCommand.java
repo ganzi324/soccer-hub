@@ -1,5 +1,6 @@
 package com.ganzi.travelmate.place.application.command;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ganzi.travelmate.common.SelfValidating;
 import com.ganzi.travelmate.place.domain.Address;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +11,7 @@ import lombok.Getter;
 public class AddPlaceCommand extends SelfValidating<AddPlaceCommand> {
 
     @Size(min = 1, max = 20, message = "이름은 1~20 글자여야 합니다.")
-    @NotBlank
+    @NotBlank(message = "이름은 필수입니다.")
     private final String name;
 
     private final String description;
@@ -20,17 +21,17 @@ public class AddPlaceCommand extends SelfValidating<AddPlaceCommand> {
     private final String state;
 
     @Size(min = 1, max = 50)
-    @NotBlank
+    @NotBlank(message = "도시명은 필수입니다.")
     private final String city;
 
     @Size(min = 1, max = 100)
-    @NotBlank
+    @NotBlank(message = "도로명은 필수입니다.")
     private final String street;
 
     private final String detailAddress;
 
     @Size(min = 1, max = 10)
-    @NotBlank
+    @NotBlank(message = "우편번호는 필수입니다.")
     private final String postalCode;
 
     private final double latitude;
@@ -51,6 +52,7 @@ public class AddPlaceCommand extends SelfValidating<AddPlaceCommand> {
         this.validateSelf();
     }
 
+    @JsonIgnore
     public Address getAddress() {
         return new Address(
           state,
