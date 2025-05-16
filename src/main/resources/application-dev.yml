@@ -1,4 +1,4 @@
-aserver:
+server:
   port: 8080
   servlet:
     context-path: /api
@@ -35,6 +35,9 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+
+  restdocs:
+    outputDir: build/generated-snippets
 
 jwt:
   secret_key: ${JWT_SECRET_KEY}
