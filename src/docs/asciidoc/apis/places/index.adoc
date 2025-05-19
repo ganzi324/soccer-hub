@@ -1,0 +1,3 @@
+=== Place APIs
+
+include::add-place.adoc[]
