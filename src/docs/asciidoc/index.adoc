@@ -1,0 +1,13 @@
+= Soccer Hub REST API 문서
+:doctype: book
+:icons: font
+:toc: left
+:toclevels: 2
+:sectnums:
+:source-highlighter: highlightjs
+
+include::common/introduction.adoc[]
+
+== API 목록
+
+include::apis/places/index.adoc[]

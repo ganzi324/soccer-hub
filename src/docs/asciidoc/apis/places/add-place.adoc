@@ -1,0 +1,15 @@
+==== POST /places
+
+여행 장소를 추가합니다.
+
+.request
+include::{snippets}/places/add-place/http-request.adoc[]
+
+.request-fields
+include::{snippets}/places/add-place/request-fields.adoc[]
+
+.response
+include::{snippets}/places/add-place/http-response.adoc[]
+
+.response-fields
+include::{snippets}/places/add-place/response-fields.adoc[]
