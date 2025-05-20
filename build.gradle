@@ -121,7 +121,3 @@ tasks.register('copyDocument', Copy) {
 	from generatedDocsDir
 	into outputDocsDir
 }
-
-build {
-	dependsOn copyDocument
-}
