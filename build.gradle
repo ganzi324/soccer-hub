@@ -122,6 +122,10 @@ tasks.register('copyDocument', Copy) {
 	into outputDocsDir
 }
 
-build {
-	dependsOn copyDocument
+tasks.named('bootJar') {
+	dependsOn tasks.named('copyDocument')
+}
+
+tasks.named('build') {
+	dependsOn tasks.named('copyDocument')
 }
