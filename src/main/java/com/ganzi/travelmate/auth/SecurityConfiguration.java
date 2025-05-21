@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                                 )
                 )
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/h2-console/**", "/v1/auth/**", "/oauth2/authorization/*", "/docs/**").permitAll()
+                        .requestMatchers("/h2-console/**", "/v1/auth/**", "/oauth2/authorization/*", "/docs/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtAuthProvider), UsernamePasswordAuthenticationFilter.class)
