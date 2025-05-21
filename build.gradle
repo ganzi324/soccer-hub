@@ -122,10 +122,14 @@ tasks.register('copyDocument', Copy) {
 	into outputDocsDir
 }
 
-tasks.named('bootJar') {
-	dependsOn tasks.named('copyDocument')
+bootJar {
+	dependsOn asciidoctor
+	copy {
+		from "${asciidoctor.outputDir}"
+		into 'BOOT-INF/classes/static/docs'
+	}
 }
 
-tasks.named('build') {
-	dependsOn tasks.named('copyDocument')
+build {
+	dependsOn copyDocument
 }
