@@ -11,6 +11,10 @@ ext {
 	hamcrestVersion = '3.0'
 	hashIdsVersion = '1.0.3'
 	queryDslVersion = '5.0.0:jakarta'
+	querydslDir = 'build/generated/querydsl' as File
+	snippetsDir = file('build/generated-snippets') as File
+	generatedDocsDir = file("build/docs/asciidoc") as File
+	outputDocsDir = file("src/main/resources/static/docs") as File
 }
 
 group = 'com.ganzi'
@@ -74,6 +78,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -84,12 +90,6 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testRuntimeOnly 'com.h2database:h2'
 }
-
-def querydslDir = 'build/generated/querydsl' as File
-def snippetsDir = file('build/generated-snippets') as File
-def generatedDocsDir = file("build/docs/asciidoc") as File
-def outputDocsDir = file("src/main/resources/static/docs") as File
-
 
 test {
 	useJUnitPlatform()
@@ -123,9 +123,9 @@ tasks.register('copyDocument', Copy) {
 }
 
 bootJar {
-	dependsOn asciidoctor
+	dependsOn copyDocument
 	from ("${asciidoctor.outputDir}/html5") {
-		into 'static/docs'
+		into('static/docs')
 	}
 }
 
