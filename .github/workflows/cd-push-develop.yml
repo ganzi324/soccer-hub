@@ -20,7 +20,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/travelmate-api:develop .
+        run: |
+          docker build \
+            --build-arg ENV=develop \
+            -t ${{ secrets.DOCKER_USERNAME }}/travelmate-api:develop .
 
       - name: Push Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/travelmate-api:develop
