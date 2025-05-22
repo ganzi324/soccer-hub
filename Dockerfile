@@ -1,11 +1,19 @@
 # Build stage
 FROM eclipse-temurin:21-alpine AS build
 
+ARG ENV
+ENV ENV=$ENV
+
 WORKDIR /app
 
 COPY . .
 RUN chmod +x ./gradlew
-RUN ./gradlew build -x test --no-daemon
+
+RUN if [ "$ENV" = "develop" ]; then \
+      ./gradlew build --no-daemon ; \
+    else \
+      ./gradlew build -x test -x asciidoctor -x copyDocument --no-daemon ; \
+    fi
 
 # Runtime stage
 FROM eclipse-temurin:21-alpine
